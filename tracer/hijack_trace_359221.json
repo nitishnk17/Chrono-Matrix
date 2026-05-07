@@ -1,0 +1,1767 @@
+[
+
+  {
+    "ts": 449,
+    "tid": 359223,
+    "event": "THREAD_START",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beeceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 451,
+    "tid": 359223,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 497,
+    "tid": 359224,
+    "event": "THREAD_START",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beeceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 498,
+    "tid": 359224,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 579,
+    "tid": 359225,
+    "event": "THREAD_START",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beeceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 580,
+    "tid": 359225,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 663,
+    "tid": 359227,
+    "event": "THREAD_START",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beeceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 663,
+    "tid": 359227,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 744,
+    "tid": 359228,
+    "event": "THREAD_START",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beeceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 25835,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25088
+  },
+  {
+    "ts": 25837,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 25838,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 25871,
+    "tid": 359223,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 25418
+  },
+  {
+    "ts": 25872,
+    "tid": 359223,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 25421
+  },
+  {
+    "ts": 30967,
+    "tid": 359223,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5085
+  },
+  {
+    "ts": 50978,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25118
+  },
+  {
+    "ts": 50993,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 13
+  },
+  {
+    "ts": 51000,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 7
+  },
+  {
+    "ts": 51044,
+    "tid": 359224,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 50545
+  },
+  {
+    "ts": 51046,
+    "tid": 359224,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 50548
+  },
+  {
+    "ts": 56780,
+    "tid": 359223,
+    "event": "IO_WAIT",
+    "resource": "FD_0x4",
+    "scenario": "IO_0x60a7b434b6d3",
+    "addr": "0x4",
+    "duration_us": 25334
+  },
+  {
+    "ts": 57175,
+    "tid": 359223,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "(nil)",
+    "duration_us": 31293
+  },
+  {
+    "ts": 57176,
+    "tid": 359223,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 76114,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25101
+  },
+  {
+    "ts": 76115,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 76116,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 76202,
+    "tid": 359225,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 75620
+  },
+  {
+    "ts": 76203,
+    "tid": 359225,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 75623
+  },
+  {
+    "ts": 81311,
+    "tid": 359225,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5097
+  },
+  {
+    "ts": 101259,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25126
+  },
+  {
+    "ts": 101276,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 15
+  },
+  {
+    "ts": 101284,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 8
+  },
+  {
+    "ts": 101356,
+    "tid": 359227,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 100692
+  },
+  {
+    "ts": 101358,
+    "tid": 359227,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 100695
+  },
+  {
+    "ts": 126363,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25071
+  },
+  {
+    "ts": 126364,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 126365,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 126440,
+    "tid": 359223,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 69262
+  },
+  {
+    "ts": 126442,
+    "tid": 359223,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 69266
+  },
+  {
+    "ts": 131545,
+    "tid": 359223,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5091
+  },
+  {
+    "ts": 137126,
+    "tid": 359225,
+    "event": "IO_WAIT",
+    "resource": "FD_0x4",
+    "scenario": "IO_0x60a7b434b6d3",
+    "addr": "0x4",
+    "duration_us": 55268
+  },
+  {
+    "ts": 137450,
+    "tid": 359225,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "(nil)",
+    "duration_us": 61236
+  },
+  {
+    "ts": 137483,
+    "tid": 359225,
+    "event": "LOCK_WAIT",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 32
+  },
+  {
+    "ts": 151472,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25100
+  },
+  {
+    "ts": 151473,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 151481,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 8
+  },
+  {
+    "ts": 151517,
+    "tid": 359225,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 14032
+  },
+  {
+    "ts": 151519,
+    "tid": 359225,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 14036
+  },
+  {
+    "ts": 157245,
+    "tid": 359223,
+    "event": "IO_WAIT",
+    "resource": "FD_0x6",
+    "scenario": "IO_0x60a7b434b6d3",
+    "addr": "0x6",
+    "duration_us": 25312
+  },
+  {
+    "ts": 157598,
+    "tid": 359223,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "(nil)",
+    "duration_us": 31144
+  },
+  {
+    "ts": 157598,
+    "tid": 359223,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 176550,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25063
+  },
+  {
+    "ts": 176551,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 176552,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 176587,
+    "tid": 359223,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 18987
+  },
+  {
+    "ts": 176589,
+    "tid": 359223,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 18991
+  },
+  {
+    "ts": 181670,
+    "tid": 359223,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5072
+  },
+  {
+    "ts": 189100,
+    "tid": 359224,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "(nil)",
+    "duration_us": 138037
+  },
+  {
+    "ts": 194186,
+    "tid": 359224,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5085
+  },
+  {
+    "ts": 194208,
+    "tid": 359224,
+    "event": "LOCK_WAIT",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 21
+  },
+  {
+    "ts": 201629,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25074
+  },
+  {
+    "ts": 201630,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 201634,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 4
+  },
+  {
+    "ts": 201669,
+    "tid": 359224,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 7460
+  },
+  {
+    "ts": 201670,
+    "tid": 359224,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 7462
+  },
+  {
+    "ts": 207100,
+    "tid": 359223,
+    "event": "IO_WAIT",
+    "resource": "FD_0x4",
+    "scenario": "IO_0x60a7b434b6d3",
+    "addr": "0x4",
+    "duration_us": 25171
+  },
+  {
+    "ts": 207286,
+    "tid": 359223,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "(nil)",
+    "duration_us": 30689
+  },
+  {
+    "ts": 207287,
+    "tid": 359223,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 215464,
+    "tid": 359227,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "(nil)",
+    "duration_us": 114091
+  },
+  {
+    "ts": 220552,
+    "tid": 359227,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5087
+  },
+  {
+    "ts": 220553,
+    "tid": 359227,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 226725,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25087
+  },
+  {
+    "ts": 226725,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 226726,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 226763,
+    "tid": 359223,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 19475
+  },
+  {
+    "ts": 226765,
+    "tid": 359223,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 19478
+  },
+  {
+    "ts": 231846,
+    "tid": 359223,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5072
+  },
+  {
+    "ts": 240661,
+    "tid": 359225,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "(nil)",
+    "duration_us": 89118
+  },
+  {
+    "ts": 245752,
+    "tid": 359225,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5090
+  },
+  {
+    "ts": 245791,
+    "tid": 359225,
+    "event": "LOCK_WAIT",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 38
+  },
+  {
+    "ts": 251836,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25105
+  },
+  {
+    "ts": 251843,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 251850,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 7
+  },
+  {
+    "ts": 251891,
+    "tid": 359227,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 31337
+  },
+  {
+    "ts": 251892,
+    "tid": 359227,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 31339
+  },
+  {
+    "ts": 257402,
+    "tid": 359223,
+    "event": "IO_WAIT",
+    "resource": "FD_0x4",
+    "scenario": "IO_0x60a7b434b6d3",
+    "addr": "0x4",
+    "duration_us": 25277
+  },
+  {
+    "ts": 257878,
+    "tid": 359223,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "(nil)",
+    "duration_us": 31104
+  },
+  {
+    "ts": 257879,
+    "tid": 359223,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 276918,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25061
+  },
+  {
+    "ts": 276918,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 276918,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 276960,
+    "tid": 359225,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 31166
+  },
+  {
+    "ts": 276962,
+    "tid": 359225,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 31171
+  },
+  {
+    "ts": 280725,
+    "tid": 359224,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "(nil)",
+    "duration_us": 79042
+  },
+  {
+    "ts": 282045,
+    "tid": 359225,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5074
+  },
+  {
+    "ts": 285837,
+    "tid": 359224,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5105
+  },
+  {
+    "ts": 285856,
+    "tid": 359224,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 12
+  },
+  {
+    "ts": 301989,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25068
+  },
+  {
+    "ts": 301990,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 301994,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 4
+  },
+  {
+    "ts": 302045,
+    "tid": 359223,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 44166
+  },
+  {
+    "ts": 302046,
+    "tid": 359223,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 44167
+  },
+  {
+    "ts": 327055,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25058
+  },
+  {
+    "ts": 327055,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 327055,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 327090,
+    "tid": 359224,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 41233
+  },
+  {
+    "ts": 327090,
+    "tid": 359224,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 41234
+  },
+  {
+    "ts": 330292,
+    "tid": 359227,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "(nil)",
+    "duration_us": 78390
+  },
+  {
+    "ts": 332181,
+    "tid": 359224,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5086
+  },
+  {
+    "ts": 335374,
+    "tid": 359227,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5076
+  },
+  {
+    "ts": 335396,
+    "tid": 359227,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 13
+  },
+  {
+    "ts": 337635,
+    "tid": 359225,
+    "event": "IO_WAIT",
+    "resource": "FD_0x4",
+    "scenario": "IO_0x60a7b434b6d3",
+    "addr": "0x4",
+    "duration_us": 55312
+  },
+  {
+    "ts": 337795,
+    "tid": 359225,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "(nil)",
+    "duration_us": 60824
+  },
+  {
+    "ts": 337796,
+    "tid": 359225,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 352160,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25102
+  },
+  {
+    "ts": 352160,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 352167,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 7
+  },
+  {
+    "ts": 352205,
+    "tid": 359227,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 16808
+  },
+  {
+    "ts": 352206,
+    "tid": 359227,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 16810
+  },
+  {
+    "ts": 372760,
+    "tid": 359224,
+    "event": "IO_WAIT",
+    "resource": "FD_0x6",
+    "scenario": "IO_0x60a7b434b6d3",
+    "addr": "0x6",
+    "duration_us": 40173
+  },
+  {
+    "ts": 373052,
+    "tid": 359224,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "(nil)",
+    "duration_us": 45956
+  },
+  {
+    "ts": 373053,
+    "tid": 359224,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 377232,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25059
+  },
+  {
+    "ts": 377233,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 377233,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 377273,
+    "tid": 359225,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 39476
+  },
+  {
+    "ts": 377274,
+    "tid": 359225,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 39477
+  },
+  {
+    "ts": 381360,
+    "tid": 359223,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "(nil)",
+    "duration_us": 79304
+  },
+  {
+    "ts": 382357,
+    "tid": 359225,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5079
+  },
+  {
+    "ts": 386449,
+    "tid": 359223,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5083
+  },
+  {
+    "ts": 386464,
+    "tid": 359223,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 10
+  },
+  {
+    "ts": 402309,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25075
+  },
+  {
+    "ts": 402311,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 402315,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 4
+  },
+  {
+    "ts": 402346,
+    "tid": 359224,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 29293
+  },
+  {
+    "ts": 402347,
+    "tid": 359224,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 29294
+  },
+  {
+    "ts": 427386,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25067
+  },
+  {
+    "ts": 427387,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 427388,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 427426,
+    "tid": 359223,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 40960
+  },
+  {
+    "ts": 427427,
+    "tid": 359223,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 40963
+  },
+  {
+    "ts": 431204,
+    "tid": 359227,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "(nil)",
+    "duration_us": 78986
+  },
+  {
+    "ts": 432521,
+    "tid": 359223,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5085
+  },
+  {
+    "ts": 436313,
+    "tid": 359227,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5103
+  },
+  {
+    "ts": 436331,
+    "tid": 359227,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 12
+  },
+  {
+    "ts": 438023,
+    "tid": 359225,
+    "event": "IO_WAIT",
+    "resource": "FD_0x4",
+    "scenario": "IO_0x60a7b434b6d3",
+    "addr": "0x4",
+    "duration_us": 55341
+  },
+  {
+    "ts": 438190,
+    "tid": 359225,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "(nil)",
+    "duration_us": 60911
+  },
+  {
+    "ts": 438190,
+    "tid": 359225,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 452491,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25100
+  },
+  {
+    "ts": 452492,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 452499,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 7
+  },
+  {
+    "ts": 452525,
+    "tid": 359227,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 16193
+  },
+  {
+    "ts": 452526,
+    "tid": 359227,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 16195
+  },
+  {
+    "ts": 458158,
+    "tid": 359223,
+    "event": "IO_WAIT",
+    "resource": "FD_0x6",
+    "scenario": "IO_0x60a7b434b6d3",
+    "addr": "0x6",
+    "duration_us": 25215
+  },
+  {
+    "ts": 458626,
+    "tid": 359223,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "(nil)",
+    "duration_us": 31189
+  },
+  {
+    "ts": 458627,
+    "tid": 359223,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 477565,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25060
+  },
+  {
+    "ts": 477565,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 477565,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 477613,
+    "tid": 359225,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 39421
+  },
+  {
+    "ts": 477615,
+    "tid": 359225,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 39425
+  },
+  {
+    "ts": 482724,
+    "tid": 359225,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5098
+  },
+  {
+    "ts": 488819,
+    "tid": 359224,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "(nil)",
+    "duration_us": 86455
+  },
+  {
+    "ts": 494051,
+    "tid": 359224,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5226
+  },
+  {
+    "ts": 494068,
+    "tid": 359224,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 17
+  },
+  {
+    "ts": 502648,
+    "tid": 359228,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 25080
+  },
+  {
+    "ts": 502653,
+    "tid": 359228,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 502658,
+    "tid": 359228,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 4
+  },
+  {
+    "ts": 502667,
+    "tid": 359228,
+    "event": "THREAD_END",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beeceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 502696,
+    "tid": 359223,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 44068
+  },
+  {
+    "ts": 502698,
+    "tid": 359223,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 44071
+  },
+  {
+    "ts": 502740,
+    "tid": 359221,
+    "event": "THREAD_JOIN",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beece33",
+    "addr": "0x75b1599fb6c0",
+    "duration_us": 502063
+  },
+  {
+    "ts": 502741,
+    "tid": 359221,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 502741,
+    "tid": 359221,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 502767,
+    "tid": 359224,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x60a7b43541a0",
+    "scenario": "Func_0x60a7b434bc8b",
+    "addr": "0x60a7b43541a0",
+    "duration_us": 8698
+  },
+  {
+    "ts": 502767,
+    "tid": 359224,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 8699
+  },
+  {
+    "ts": 502770,
+    "tid": 359224,
+    "event": "THREAD_END",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beeceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 531580,
+    "tid": 359227,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "(nil)",
+    "duration_us": 79042
+  },
+  {
+    "ts": 536652,
+    "tid": 359227,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5071
+  },
+  {
+    "ts": 536653,
+    "tid": 359227,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 536654,
+    "tid": 359227,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 536656,
+    "tid": 359227,
+    "event": "THREAD_END",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beeceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 538545,
+    "tid": 359225,
+    "event": "IO_WAIT",
+    "resource": "FD_0x4",
+    "scenario": "IO_0x60a7b434b6d3",
+    "addr": "0x4",
+    "duration_us": 55293
+  },
+  {
+    "ts": 538865,
+    "tid": 359225,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "(nil)",
+    "duration_us": 61240
+  },
+  {
+    "ts": 538866,
+    "tid": 359225,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 0
+  },
+  {
+    "ts": 538867,
+    "tid": 359225,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 538870,
+    "tid": 359225,
+    "event": "THREAD_END",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beeceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 580411,
+    "tid": 359223,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "(nil)",
+    "duration_us": 77705
+  },
+  {
+    "ts": 585536,
+    "tid": 359223,
+    "event": "SLEEP",
+    "resource": "0x75b15c203002",
+    "scenario": "Thread_Yield_0x60a7b434c469",
+    "addr": "(nil)",
+    "duration_us": 5123
+  },
+  {
+    "ts": 585538,
+    "tid": 359223,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd6f",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 585539,
+    "tid": 359223,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x60a7b4354160",
+    "scenario": "Func_0x60a7b434bd9e",
+    "addr": "0x60a7b4354160",
+    "duration_us": 1
+  },
+  {
+    "ts": 585543,
+    "tid": 359223,
+    "event": "THREAD_END",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beeceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 585673,
+    "tid": 359221,
+    "event": "THREAD_JOIN",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beece33",
+    "addr": "0x75b15b1fe6c0",
+    "duration_us": 82920
+  },
+  {
+    "ts": 585677,
+    "tid": 359221,
+    "event": "THREAD_JOIN",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beece33",
+    "addr": "0x75b15a9fd6c0",
+    "duration_us": 1
+  },
+  {
+    "ts": 585678,
+    "tid": 359221,
+    "event": "THREAD_JOIN",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beece33",
+    "addr": "0x75b153fff6c0",
+    "duration_us": 0
+  },
+  {
+    "ts": 585722,
+    "tid": 359221,
+    "event": "THREAD_JOIN",
+    "resource": "0x75b15c20301d",
+    "scenario": "Lifecycle_0x75b15beece33",
+    "addr": "0x75b15a1fc6c0",
+    "duration_us": 44
+  }
+]

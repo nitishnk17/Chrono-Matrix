@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrono-Matrix · HPC Thread Visualization</title>
+    <meta name="description"
+        content="Multi-page 2D Visual Analytics System for OS/HPC thread contention — timeline, memory, locks, profiling.">
+    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+    <script src="sample-trace.js?v=2"></script>
+    <script src="datasets/many-thread-trace.js?v=1"></script>
+    <link rel="stylesheet" href="css/style.css?v=11">
+</head>
+
+<body>
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" title="Toggle Sidebar" aria-label="Toggle Sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="15" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+
+    <div class="app-chassis">
+        <div class="app-scanlines"></div>
+        <div class="app-glow app-glow-cyan"></div>
+        <div class="app-glow app-glow-green"></div>
+    </div>
+
+    <!-- Loading Screen (shown only while processing data) -->
+    <div id="loading-screen" class="hidden">
+        <div class="loading-kicker">Thread Trace Analytics Workspace</div>
+        <div class="loading-title">Chrono Matrix</div>
+        <div class="loading-bar-wrap">
+            <div class="loading-bar"></div>
+        </div>
+        <div id="loading-sub" class="loading-sub">PARSING TRACE…</div>
+    </div>
+
+    <!-- Welcome / Upload Screen -->
+    <div id="welcome-screen">
+        <div class="wc-bg">
+            <div class="wc-orb wc-orb-1"></div>
+            <div class="wc-orb wc-orb-2"></div>
+            <div class="wc-orb wc-orb-3"></div>
+            <div class="wc-grid"></div>
+        </div>
+        <div class="wc-card">
+            <div class="wc-intro">
+                <div class="wc-kicker">Performance Trace Storyboard</div>
+                <div class="wc-logo">Chrono <span>Matrix</span></div>
+                <div class="wc-tagline">A calmer, clearer analytics surface for reading thread timelines, contention, memory pressure, and deadlock signals.</div>
+                <p class="wc-desc">Load a tracer JSON to move from raw execution logs to a polished visual narrative with coordinated 2D and immersive 3D analysis views.</p>
+                <div class="wc-features">
+                    <div class="wc-feat"><span class="wc-feat-dot" style="background:#2f7d6d"></span>Timeline Storytelling</div>
+                    <div class="wc-feat"><span class="wc-feat-dot" style="background:#d7a23a"></span>Thread Diagnostics</div>
+                    <div class="wc-feat"><span class="wc-feat-dot" style="background:#8c5e3c"></span>Lock and Memory Signals</div>
+                    <div class="wc-feat"><span class="wc-feat-dot" style="background:#b85042"></span>Deadlock Detection</div>
+                </div>
+            </div>
+
+            <div class="wc-console">
+                <div class="wc-console-head">
+                    <span>TRACE WORKSPACE</span>
+                    <span class="wc-console-status">READY</span>
+                </div>
+
+                <label class="wc-dropzone" id="wc-dropzone">
+                    <div class="wc-drop-icon">
+                        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 32V16M24 16L17 23M24 16L31 23" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 36C5.8 34.4 4 31.9 4 29C4 24.6 7.3 21 11.5 20.5C12.3 15.7 16.7 12 22 12C25.5 12 28.6 13.6 30.7 16.1C31.1 16 31.5 16 32 16C36.4 16 40 19.6 40 24C40 24.7 39.9 25.4 39.7 26C42.3 27 44 29.4 44 32C44 35.3 41.3 38 38 38H10C9.3 38 8.6 37.6 8 37" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <div class="wc-drop-title">Drop your trace file</div>
+                    <div class="wc-drop-sub">or <span>browse a local JSON trace</span></div>
+                    <input type="file" id="trace-upload" accept=".json" style="display:none">
+                </label>
+
+                <div class="wc-or-row">
+                    <div class="wc-or-line"></div>
+                    <span class="wc-or-text">prototype dataset</span>
+                    <div class="wc-or-line"></div>
+                </div>
+                <button class="wc-sample-btn" id="wc-load-sample">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:7px;vertical-align:middle"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    Load Sample Trace
+                </button>
+                <button class="wc-sample-btn wc-large-sample-btn" id="wc-load-large-sample">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:7px;vertical-align:middle"><polyline points="4 17 10 11 14 15 21 8"/><polyline points="17 8 21 8 21 12"/></svg>
+                    Load 24-Thread Trace
+                </button>
+
+                <div class="wc-spec-grid">
+                    <div class="wc-spec">
+                        <span class="wc-spec-k">PIPELINE</span>
+                        <span class="wc-spec-v">8 or 24 Threads</span>
+                    </div>
+                    <div class="wc-spec">
+                        <span class="wc-spec-k">EVENTS</span>
+                        <span class="wc-spec-v">811</span>
+                    </div>
+                    <div class="wc-spec">
+                        <span class="wc-spec-k">WINDOW</span>
+                        <span class="wc-spec-v">4.5s</span>
+                    </div>
+                    <div class="wc-spec">
+                        <span class="wc-spec-k">VIEWS</span>
+                        <span class="wc-spec-v">Dashboard + Spatial</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Tooltip -->
+    <div id="global-tooltip" class="tooltip-box"></div>
+
+    <!-- App Shell -->
+    <div id="app-shell">
+
+        <!-- Sidebar Navigation -->
+        <nav id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-icon">CM</div>
+                <div class="brand-meta">
+                    <div class="brand-name">Chrono Matrix</div>
+                    <div class="brand-sub" id="brand-sub">ACTIVE_THREADS: —</div>
+                </div>
+            </div>
+
+            <div class="sidebar-nav">
+                <a class="nav-item active" data-page="overview" title="Overview">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                        <rect x="14" y="14" width="7" height="7" />
+                    </svg>
+                    <span class="nav-label">Overview</span>
+                </a>
+                <a class="nav-item" data-page="timeline" title="Thread Timeline">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="15" y2="12" />
+                        <line x1="3" y1="18" x2="18" y2="18" />
+                        <circle cx="18" cy="6" r="2" fill="currentColor" />
+                        <circle cx="17" cy="12" r="2" fill="currentColor" />
+                        <circle cx="20" cy="18" r="2" fill="currentColor" />
+                    </svg>
+                    <span class="nav-label">Timeline</span>
+                </a>
+                <a class="nav-item" data-page="memory" title="Memory Analysis">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="2" y="4" width="20" height="16" rx="2" />
+                        <line x1="8" y1="4" x2="8" y2="20" />
+                        <line x1="14" y1="4" x2="14" y2="20" />
+                        <line x1="2" y1="10" x2="22" y2="10" />
+                        <line x1="2" y1="16" x2="22" y2="16" />
+                    </svg>
+                    <span class="nav-label">Memory</span>
+                </a>
+                <a class="nav-item" data-page="contention" title="Lock Contention">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 3 C12 3 8 7 12 12 S16 21 12 21" />
+                        <path d="M3 12 h18" />
+                    </svg>
+                    <span class="nav-label">Contention</span>
+                </a>
+                <a class="nav-item" data-page="profiler" title="Thread Profiler">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                    </svg>
+                    <span class="nav-label">Profiler</span>
+                </a>
+                <a class="nav-item" data-page="dependency" title="Dependency Graph">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="5" r="3" />
+                        <circle cx="5" cy="19" r="3" />
+                        <circle cx="19" cy="19" r="3" />
+                        <line x1="10.5" y1="7.5" x2="6.5" y2="16.5" />
+                        <line x1="13.5" y1="7.5" x2="17.5" y2="16.5" />
+                        <line x1="7.5" y1="19" x2="16.5" y2="19" />
+                    </svg>
+                    <span class="nav-label">Dependency</span>
+                </a>
+
+                <!-- ── 3D Views Separator ── -->
+                <div class="nav-section-divider">
+                    <span class="nav-section-label">3D VIEWS</span>
+                </div>
+
+                <a class="nav-item" data-page="timeline3d" title="3D Timeline">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="2" y="14" width="4" height="7" rx="1"/>
+                        <rect x="9" y="9"  width="4" height="12" rx="1"/>
+                        <rect x="16" y="4" width="4" height="17" rx="1"/>
+                        <path d="M2 20 L22 4" stroke-dasharray="2 2" opacity="0.4"/>
+                    </svg>
+                    <span class="nav-label">Spatial Timeline</span>
+                </a>
+
+                <a class="nav-item" data-page="galaxy3d" title="Thread Galaxy 3D">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <ellipse cx="12" cy="12" rx="9" ry="4" />
+                        <circle cx="12" cy="12" r="2" fill="currentColor" />
+                        <circle cx="5.5" cy="9.5" r="1" fill="currentColor" opacity="0.6" />
+                        <circle cx="18.5" cy="14.5" r="1.2" fill="currentColor" opacity="0.8" />
+                        <circle cx="16" cy="7" r="0.8" fill="currentColor" opacity="0.5" />
+                    </svg>
+                    <span class="nav-label">Thread Galaxy</span>
+                </a>
+
+                <a class="nav-item" data-page="flow3d" title="Event Flow">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M3 8 Q7 4 11 8 Q15 12 19 8" stroke-linecap="round" />
+                        <path d="M3 14 Q7 10 11 14 Q15 18 19 14" stroke-linecap="round" opacity="0.7" />
+                        <circle cx="19" cy="8" r="1.8" fill="currentColor" />
+                        <circle cx="19" cy="14" r="1.8" fill="currentColor" opacity="0.7" />
+                    </svg>
+                    <span class="nav-label">Flow Field</span>
+                </a>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="sidebar-cta" id="btn-reset-sidebar">Reset Filters</button>
+                <div class="sidebar-status">
+                    <div class="sidebar-status-dot"></div>
+                    <div class="sidebar-status-text">Trace loaded</div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main id="app-main">
+
+            <!-- Top Bar -->
+            <div id="top-bar">
+                <div class="top-bar-left">
+                    <div class="top-bar-kicker">Chrono Matrix analytics workspace</div>
+                    <div id="page-title" class="page-title-text">Overview</div>
+                    <div id="page-subtitle" class="page-subtitle-text">System summary, key metrics, and the dominant performance signals</div>
+                </div>
+                <div class="top-bar-right">
+                    <div id="global-stats-strip">
+                        <span class="gs-item"><span class="gs-lbl">EVENTS</span><span id="gs-events"
+                                class="gs-val">—</span></span>
+                        <span class="gs-sep">|</span>
+                        <span class="gs-item"><span class="gs-lbl">THREADS</span><span id="gs-threads"
+                                class="gs-val">—</span></span>
+                        <span class="gs-sep">|</span>
+                        <span class="gs-item"><span class="gs-lbl">DURATION</span><span id="gs-dur"
+                                class="gs-val">—</span></span>
+                        <span class="gs-sep">|</span>
+                        <span id="deadlock-badge" class="badge badge-red" style="display:none">⚠ DEADLOCK</span>
+                    </div>
+                    <label class="btn btn-upload" style="cursor:pointer; margin-right: 8px;" title="Load a new trace.json">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:5px;vertical-align:middle"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Load Trace
+                        <input type="file" id="trace-upload-topbar" accept=".json" style="display:none;">
+                    </label>
+                    <button class="btn" id="btn-reset">Reset View</button>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- PAGE: OVERVIEW                                  -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="page active" id="page-overview">
+                <div class="overview-masthead">
+                    <div class="overview-hero">
+                        <div class="overview-kicker">Execution at a glance</div>
+                        <h1 class="overview-title">Trace <span>Intelligence</span></h1>
+                        <p class="overview-copy">Read the full execution story through coordinated views that surface where time was spent, where locks stalled progress, and which threads deserve attention first.</p>
+                    </div>
+                    <div class="overview-callouts">
+                        <div class="overview-callout">
+                            <span class="overview-callout-k">Focus</span>
+                            <span class="overview-callout-v">Critical wait paths</span>
+                        </div>
+                        <div class="overview-callout">
+                            <span class="overview-callout-k">Workspace</span>
+                            <span class="overview-callout-v">Interactive visual profiler</span>
+                        </div>
+                        <div class="overview-callout">
+                            <span class="overview-callout-k">Status</span>
+                            <span class="overview-callout-v">Ready for trace inspection</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- KPI Cards -->
+                <div class="kpi-grid" id="kpi-grid"></div>
+
+                <!-- Charts row -->
+                <div class="ov-charts-row">
+                    <!-- Event Density Area Chart -->
+                    <div class="panel ov-density-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <div class="icon">▲</div>ACTIVITY RHYTHM
+                            </div>
+                            <span id="density-meta" class="panel-meta"></span>
+                        </div>
+                        <div id="density-chart"></div>
+                    </div>
+                </div>
+
+                <!-- Bottom row -->
+                <div class="ov-bottom-row">
+                    <!-- Top Waiters -->
+                    <div class="panel ov-waiters-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <div class="icon">⬛</div>THREADS WITH THE HIGHEST WAIT COST
+                            </div>
+                            <span class="panel-meta">Ranked by total blocking time</span>
+                        </div>
+                        <div id="waiters-chart"></div>
+                    </div>
+
+                    <!-- Event Type Breakdown -->
+                    <div class="panel ov-events-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <div class="icon">≡</div>EVENT BREAKDOWN
+                            </div>
+                            <span class="panel-meta">Detailed distribution across event classes</span>
+                        </div>
+                        <div id="evtype-chart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- PAGE: TIMELINE                                  -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="page" id="page-timeline">
+                <div class="panel page-panel">
+                    <div class="panel-header" style="align-items:center;">
+                        <div class="event-filter-row" id="event-type-filters">
+                            <label class="ev-chk" data-ev="COMPUTE"><span class="ev-dot" style="background:#4caf50"></span>Compute</label>
+                            <label class="ev-chk" data-ev="SLEEP"><span class="ev-dot" style="background:#9e9e9e"></span>Sleep</label>
+                            <label class="ev-chk" data-ev="IO_WAIT"><span class="ev-dot" style="background:#4dd0e1"></span>I/O</label>
+                            <label class="ev-chk" data-ev="COND_WAIT"><span class="ev-dot" style="background:#f06292"></span>Cond Wait</label>
+                            <label class="ev-chk" data-ev="THREAD_JOIN"><span class="ev-dot" style="background:#ba68c8"></span>Join</label>
+                            <label class="ev-chk" data-ev="LOCK_ACQUIRE"><span class="ev-dot" style="background:#ffb74d"></span>Acquire</label>
+                            <label class="ev-chk" data-ev="LOCK_WAIT"><span class="ev-dot" style="background:#e53935"></span>Lock Wait</label>
+                            <label class="ev-chk" data-ev="LOCK_RELEASE"><span class="ev-dot" style="background:#29b6f6"></span>Release</label>
+                        </div>
+                        <span id="gantt-meta" class="panel-meta" style="margin-left:auto;white-space:nowrap;"></span>
+                    </div>
+
+                    <div id="gantt-chart"></div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- PAGE: MEMORY                                    -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="page" id="page-memory">
+                <div class="mem-layout">
+                    <div class="panel mem-heatmap-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <div class="icon">▦</div>MEMORY CONTENTION HEATMAP
+                            </div>
+                            <span id="heatmap-meta" class="panel-meta"></span>
+                        </div>
+                        <div id="heatmap-chart"></div>
+                    </div>
+                    <div class="panel mem-rank-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <div class="icon">↓</div>HOTTEST ADDRESSES
+                            </div>
+                            <span class="panel-meta">By total lock-wait events</span>
+                        </div>
+                        <div id="addr-rank-chart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- PAGE: CONTENTION                                -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="page" id="page-contention">
+                <div class="contention-layout">
+                    <div class="panel chord-big-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <div class="icon">◎</div>LOCK CONTENTION MAP
+                            </div>
+                            <span id="chord-meta" class="panel-meta"></span>
+                        </div>
+                        <div id="chord-chart"></div>
+                    </div>
+                    <div class="contention-right-col">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">
+                                    <div class="icon">⬛</div>MUTEX WAIT WATERFALL
+                                </div>
+                                <span class="panel-meta">By total wait duration</span>
+                            </div>
+                            <div id="waterfall-chart"></div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">
+                                    <div class="icon">≡</div>LOCK RESOURCE RANKING
+                                </div>
+                                <span class="panel-meta">Sorted by contention time</span>
+                            </div>
+                            <div id="lock-table-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- PAGE: PROFILER                                  -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="page" id="page-profiler">
+                <div class="profiler-top-bar">
+                    <label class="profiler-thread-label">Select Thread:</label>
+                    <select id="thread-selector" class="styled-select"></select>
+                    <div id="profiler-score-card"></div>
+                </div>
+                <div class="profiler-layout">
+                    <div class="panel profiler-main-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <div class="icon">▲</div>COMPUTE vs WAIT OVER TIME
+                            </div>
+                            <span id="profiler-meta" class="panel-meta"></span>
+                        </div>
+                        <div id="profiler-area-chart"></div>
+                    </div>
+                    <div class="profiler-right-col">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">
+                                    <div class="icon">◔</div>EVENT DISTRIBUTION
+                                </div>
+                            </div>
+                            <div id="profiler-donut"></div>
+                        </div>
+                        <div class="panel">
+                            <div class="panel-header">
+                                <div class="panel-title">
+                                    <div class="icon">≡</div>THREAD STATS
+                                </div>
+                            </div>
+                            <div id="profiler-stats-cards"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- PAGE: DEPENDENCY GRAPH                          -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="page" id="page-dependency">
+                <div class="panel page-panel">
+                    <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div class="panel-title">
+                                <div class="icon">☍</div>THREAD DEPENDENCY GRAPH
+                            </div>
+                            <span id="dependency-meta" class="panel-meta"></span>
+                        </div>
+                        <div
+                            style="width: 100%; display: flex; align-items: center; gap: 10px; padding-top: 5px; border-top: 1px solid rgba(0, 245, 255, 0.07);">
+                            <span
+                                style="font-family: var(--font-code); font-size: 11px; color: var(--text-muted); white-space: nowrap;">TIME
+                                SCRUBBER</span>
+                            <input type="range" id="dep-time-scrubber" min="0" max="1000" value="1000"
+                                style="flex: 1; accent-color: var(--cyan); cursor: pointer;" />
+                            <span id="dep-time-display"
+                                style="font-family: var(--font-code); font-size: 11px; color: var(--cyan); min-width: 50px; text-align: right;">100.0%</span>
+                        </div>
+                    </div>
+                    <div id="dependency-chart"></div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- PAGE: TIMELINE 3D                               -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="page page-3d" id="page-timeline3d">
+                <div class="viz3d-controls">
+                    <div class="viz3d-legend" id="tl3-legend"></div>
+                    <div class="viz3d-btns">
+                        <button class="viz3d-btn" id="tl3-reset-cam">⟳ RESET VIEW</button>
+                        <button class="viz3d-btn" id="tl3-autorot">↻ AUTO OFF</button>
+                        <button class="viz3d-btn" id="tl3-cam-iso"  title="Bird's Eye Isometric">ISO MAP</button>
+                        <button class="viz3d-btn" id="tl3-cam-front" title="Front Elevation">FRONT</button>
+                        <button class="viz3d-btn" id="tl3-cam-side"  title="Side Profiles">SIDE</button>
+                        <select class="viz3d-select" id="tl3-filter">
+                            <option value="all">All Events</option>
+                            <option value="COMPUTE">Compute</option>
+                            <option value="IO_WAIT">I/O Wait</option>
+                            <option value="SLEEP">Sleep</option>
+                            <option value="LOCK_WAIT">Lock Wait</option>
+                            <option value="LOCK_ACQUIRE">Lock Acquire</option>
+                            <option value="COND_WAIT">Cond Wait</option>
+                            <option value="THREAD_JOIN">Thread Join</option>
+                        </select>
+                    </div>
+                    <div class="viz3d-hud">
+                        <span class="viz3d-hud-item"><span class="viz3d-hud-k">THREADS</span><span id="tl3-hud-threads" class="viz3d-hud-v">—</span></span>
+                        <span class="viz3d-sep">|</span>
+                        <span class="viz3d-hud-item"><span class="viz3d-hud-k">EVENTS</span><span id="tl3-hud-events" class="viz3d-hud-v">—</span></span>
+                        <span class="viz3d-sep">|</span>
+                        <span class="viz3d-hud-item"><span class="viz3d-hud-k">MAX DUR</span><span id="tl3-hud-dur" class="viz3d-hud-v">—</span></span>
+                    </div>
+                </div>
+                <div class="viz3d-canvas-wrap" id="tl3d-canvas-wrap">
+                    <canvas id="tl3d-canvas"></canvas>
+                </div>
+                <div id="tl3d-tooltip" class="viz3d-tooltip" style="display:none">
+                    <div class="viz3d-tt-name" id="tl3-tt-tid">—</div>
+                    <div class="viz3d-tt-row"><span class="viz3d-tt-k">Event</span><span class="viz3d-tt-v" id="tl3-tt-ev">—</span></div>
+                    <div class="viz3d-tt-row"><span class="viz3d-tt-k">Duration</span><span class="viz3d-tt-v" id="tl3-tt-dur">—</span></div>
+                    <div class="viz3d-tt-row"><span class="viz3d-tt-k">Resource</span><span class="viz3d-tt-v" id="tl3-tt-res">—</span></div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- PAGE: GALAXY 3D                                  -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="page page-3d" id="page-galaxy3d">
+                <!-- Galaxy Controls Bar -->
+                <div class="viz3d-controls">
+                    <div class="viz3d-legend">
+                        <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#00e5ff"></span>Compute</div>
+                        <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#10b981"></span>Lock Acquired</div>
+                        <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#f59e0b"></span>Lock Wait</div>
+                        <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#e11d48"></span>Deadlock</div>
+                        <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#c084fc"></span>Scenario</div>
+                    </div>
+                    <div class="viz3d-btns">
+                        <button class="viz3d-btn" id="gx-play-btn">⏸ PAUSE</button>
+                        <button class="viz3d-btn" id="gx-explode-btn">💥 DEADLOCK BURST</button>
+                        <button class="viz3d-btn" id="gx-spread-btn">🌌 SCATTER</button>
+                        <button class="viz3d-btn" id="gx-cluster-btn">⚡ CLUSTER</button>
+                        <div class="viz3d-progress-wrap"><div id="gx-progress" class="viz3d-progress-fill"></div></div>
+                        <span class="viz3d-time-lbl" id="gx-time-lbl">t = 0 µs</span>
+                    </div>
+                    <div class="viz3d-hud-strip">
+                        <span class="viz3d-hud-item"><span class="viz3d-hud-k">STARS</span><span id="gx-hud-stars" class="viz3d-hud-v">—</span></span>
+                        <span class="viz3d-sep">|</span>
+                        <span class="viz3d-hud-item"><span class="viz3d-hud-k">ACTIVE</span><span id="gx-hud-active" class="viz3d-hud-v">—</span></span>
+                        <span class="viz3d-sep">|</span>
+                        <span class="viz3d-hud-item"><span class="viz3d-hud-k">DEADLOCKED</span><span id="gx-hud-dl" class="viz3d-hud-v" style="color:#e11d48">—</span></span>
+                        <span class="viz3d-sep">|</span>
+                        <span class="viz3d-hud-item"><span class="viz3d-hud-k">ELAPSED</span><span id="gx-hud-time" class="viz3d-hud-v">—</span></span>
+                    </div>
+                </div>
+                <!-- Galaxy Canvas -->
+                <div id="galaxy3d-canvas-wrap" class="viz3d-canvas-wrap">
+                    <canvas id="galaxy3d-canvas"></canvas>
+                </div>
+                <!-- Galaxy Tooltip -->
+                <div id="gx-tooltip" class="viz3d-tooltip" style="display:none">
+                    <div class="viz3d-tt-name" id="gx-tt-name">—</div>
+                    <div class="viz3d-tt-row"><span class="viz3d-tt-k">Scenario</span><span class="viz3d-tt-v" id="gx-tt-sc">—</span></div>
+                    <div class="viz3d-tt-row"><span class="viz3d-tt-k">Events</span><span class="viz3d-tt-v" id="gx-tt-ev">—</span></div>
+                    <div class="viz3d-tt-row"><span class="viz3d-tt-k">Lock Waits</span><span class="viz3d-tt-v" id="gx-tt-lw">—</span></div>
+                    <div class="viz3d-tt-row"><span class="viz3d-tt-k">State</span><span class="viz3d-tt-v" id="gx-tt-st">—</span></div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- PAGE: EVENT FLOW 3D                             -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="page page-3d" id="page-flow3d">
+                <!-- Color key bar -->
+                <div class="viz3d-color-key">
+                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#00e5ff"></span>COMPUTE</div>
+                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#10b981"></span>LOCK ACQUIRE</div>
+                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#f59e0b"></span>LOCK WAIT</div>
+                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#64748b"></span>LOCK RELEASE</div>
+                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#e11d48"></span>DEADLOCK</div>
+                    <span class="viz3d-ck-dir">← OLDER &nbsp;&nbsp; NEWER →</span>
+                </div>
+                <!-- Flow Controls Bar -->
+                <div class="viz3d-controls viz3d-controls-flow">
+                    <div class="viz3d-btns">
+                        <button class="viz3d-btn" id="fl-play-btn">⏸ PAUSE</button>
+                        <button class="viz3d-btn" id="fl-speed-btn">1× SPEED</button>
+                        <button class="viz3d-btn" id="fl-burst-btn">⚡ BURST</button>
+                        <select id="fl-filter-sel" class="viz3d-select">
+                            <option value="all">All Events</option>
+                            <option value="COMPUTE">Compute</option>
+                            <option value="LOCK_WAIT">Lock Wait</option>
+                            <option value="DEADLOCK_DETECTED">Deadlock</option>
+                        </select>
+                        <input type="range" id="fl-tl-slider" min="0" max="1000" value="0" class="viz3d-slider" />
+                        <span class="viz3d-time-lbl" id="fl-time-lbl">—</span>
+                    </div>
+                    <div class="viz3d-hud-strip">
+                        <span class="viz3d-hud-item"><span class="viz3d-hud-k">PARTICLES</span><span id="fl-rate" class="viz3d-hud-v">—</span></span>
+                        <span class="viz3d-sep">|</span>
+                        <span class="viz3d-hud-item"><span class="viz3d-hud-k">TOTAL</span><span id="fl-total" class="viz3d-hud-v">—</span></span>
+                        <span class="viz3d-sep">|</span>
+                        <span class="viz3d-hud-item"><span class="viz3d-hud-k">DEADLOCK PULSES</span><span id="fl-dl" class="viz3d-hud-v" style="color:#e11d48">—</span></span>
+                    </div>
+                </div>
+                <!-- Flow Canvas + Side Panel -->
+                <div class="viz3d-flow-layout">
+                    <div id="flow3d-canvas-wrap" class="viz3d-canvas-wrap">
+                        <canvas id="flow3d-canvas"></canvas>
+                    </div>
+                    <!-- Event Breakdown Side Panel -->
+                    <div class="viz3d-side-panel">
+                        <div class="viz3d-side-title">Event Breakdown</div>
+                        <div id="fl-ev-breakdown"></div>
+                        <div class="viz3d-guide-box" style="margin-top:12px">
+                            <div class="viz3d-guide-title">HOW TO READ</div>
+                            Each <b>row</b> = one OS thread.<br>
+                            Each <b>pill</b> = one event.<br>
+                            Events stream <b>left→right</b>.<br>
+                            <b>Width</b> = event duration.<br>
+                            <span style="color:#e11d48">Red rings</span> = deadlock detected.
+                        </div>
+                    </div>
+                </div>
+                <!-- Flow Tooltip -->
+                <div id="fl-tooltip" class="viz3d-tooltip" style="display:none">
+                    <div class="viz3d-tt-name" id="fl-tt-n">—</div>
+                    <div class="viz3d-tt-row"><span class="viz3d-tt-k">Thread</span><span class="viz3d-tt-v" id="fl-tt-t">—</span></div>
+                    <div class="viz3d-tt-row"><span class="viz3d-tt-k">Event</span><span class="viz3d-tt-v" id="fl-tt-e">—</span></div>
+                    <div class="viz3d-tt-row"><span class="viz3d-tt-k">Duration</span><span class="viz3d-tt-v" id="fl-tt-d">—</span></div>
+                    <div class="viz3d-tt-row"><span class="viz3d-tt-k">Scenario</span><span class="viz3d-tt-v" id="fl-tt-s">—</span></div>
+                </div>
+            </div>
+
+        </main><!-- /#app-main -->
+    </div><!-- /#app-shell -->
+
+    <!-- Scripts -->
+    <script src="js/eventbus.js?v=4"></script>
+    <script src="js/gantt.js?v=9"></script>
+    <script src="js/heatmap.js?v=7"></script>
+    <script src="js/chord.js?v=9"></script>
+    <script src="js/stats.js?v=4"></script>
+    <script src="js/overview.js?v=16"></script>
+    <script src="js/profiler.js?v=7"></script>
+    <script src="js/lockstats.js?v=8"></script>
+    <script src="js/dependency.js?v=1"></script>
+    <script src="js/timeline3d.js?v=6"></script>
+    <script src="js/galaxy3d.js?v=7"></script>
+    <script src="js/flow3d.js?v=3"></script>
+    <script src="js/main.js?v=10"></script>
+
+</body>
+
+</html>

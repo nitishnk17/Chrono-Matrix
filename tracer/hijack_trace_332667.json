@@ -1,0 +1,1640 @@
+[
+  {
+    "ts": 349,
+    "tid": 332668,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410eceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 356,
+    "tid": 332668,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 6
+  },
+  {
+    "ts": 527,
+    "tid": 332670,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410eceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 529,
+    "tid": 332670,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 602,
+    "tid": 332669,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410eceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 606,
+    "tid": 332669,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 646,
+    "tid": 332671,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410eceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 648,
+    "tid": 332671,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 822,
+    "tid": 332672,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410eceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 25962,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25136
+  },
+  {
+    "ts": 25965,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 25967,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 26025,
+    "tid": 332668,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x59adf41521a0",
+    "scenario": "Func_0x59adf4149c8b",
+    "addr": "0x59adf41521a0",
+    "duration_us": 25667
+  },
+  {
+    "ts": 26027,
+    "tid": 332668,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 25671
+  },
+  {
+    "ts": 31149,
+    "tid": 332668,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5108
+  },
+  {
+    "ts": 51134,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25143
+  },
+  {
+    "ts": 51149,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 13
+  },
+  {
+    "ts": 51157,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 8
+  },
+  {
+    "ts": 51236,
+    "tid": 332670,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x59adf41521a0",
+    "scenario": "Func_0x59adf4149c8b",
+    "addr": "0x59adf41521a0",
+    "duration_us": 50705
+  },
+  {
+    "ts": 51237,
+    "tid": 332670,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 50708
+  },
+  {
+    "ts": 57080,
+    "tid": 332668,
+    "event": "IO_WAIT",
+    "resource": "FD_3",
+    "scenario": "IO_0x59adf41496d3",
+    "addr": "0x3",
+    "duration_us": 25293
+  },
+  {
+    "ts": 57526,
+    "tid": 332668,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "0x0",
+    "duration_us": 31484
+  },
+  {
+    "ts": 57527,
+    "tid": 332668,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 76246,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25074
+  },
+  {
+    "ts": 76249,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 76250,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 76296,
+    "tid": 332669,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x59adf41521a0",
+    "scenario": "Func_0x59adf4149c8b",
+    "addr": "0x59adf41521a0",
+    "duration_us": 75687
+  },
+  {
+    "ts": 76298,
+    "tid": 332669,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 75692
+  },
+  {
+    "ts": 81425,
+    "tid": 332669,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5100
+  },
+  {
+    "ts": 101399,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25132
+  },
+  {
+    "ts": 101450,
+    "tid": 332672,
+    "event": "LOCK_WAIT",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 49
+  },
+  {
+    "ts": 101463,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 13
+  },
+  {
+    "ts": 101524,
+    "tid": 332671,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x59adf41521a0",
+    "scenario": "Func_0x59adf4149c8b",
+    "addr": "0x59adf41521a0",
+    "duration_us": 100875
+  },
+  {
+    "ts": 101526,
+    "tid": 332671,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 100878
+  },
+  {
+    "ts": 122253,
+    "tid": 332669,
+    "event": "IO_WAIT",
+    "resource": "FD_3",
+    "scenario": "IO_0x59adf41496d3",
+    "addr": "0x3",
+    "duration_us": 40286
+  },
+  {
+    "ts": 122692,
+    "tid": 332669,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "0x0",
+    "duration_us": 46380
+  },
+  {
+    "ts": 122693,
+    "tid": 332669,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 126565,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25086
+  },
+  {
+    "ts": 126567,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 126569,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 126621,
+    "tid": 332668,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x59adf41521a0",
+    "scenario": "Func_0x59adf4149c8b",
+    "addr": "0x59adf41521a0",
+    "duration_us": 69091
+  },
+  {
+    "ts": 126623,
+    "tid": 332668,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 69096
+  },
+  {
+    "ts": 131710,
+    "tid": 332668,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5074
+  },
+  {
+    "ts": 151708,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25103
+  },
+  {
+    "ts": 151730,
+    "tid": 332672,
+    "event": "LOCK_WAIT",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 21
+  },
+  {
+    "ts": 151741,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 10
+  },
+  {
+    "ts": 151802,
+    "tid": 332669,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x59adf41521a0",
+    "scenario": "Func_0x59adf4149c8b",
+    "addr": "0x59adf41521a0",
+    "duration_us": 29107
+  },
+  {
+    "ts": 151805,
+    "tid": 332669,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 29112
+  },
+  {
+    "ts": 157627,
+    "tid": 332668,
+    "event": "IO_WAIT",
+    "resource": "FD_3",
+    "scenario": "IO_0x59adf41496d3",
+    "addr": "0x3",
+    "duration_us": 25261
+  },
+  {
+    "ts": 158022,
+    "tid": 332668,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "0x0",
+    "duration_us": 31386
+  },
+  {
+    "ts": 158024,
+    "tid": 332668,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 176827,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25078
+  },
+  {
+    "ts": 176830,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 176831,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 176860,
+    "tid": 332668,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x59adf41521a0",
+    "scenario": "Func_0x59adf4149c8b",
+    "addr": "0x59adf41521a0",
+    "duration_us": 18834
+  },
+  {
+    "ts": 176862,
+    "tid": 332668,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 18838
+  },
+  {
+    "ts": 181951,
+    "tid": 332668,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5076
+  },
+  {
+    "ts": 201956,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25105
+  },
+  {
+    "ts": 201981,
+    "tid": 332672,
+    "event": "LOCK_WAIT",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 23
+  },
+  {
+    "ts": 201995,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 14
+  },
+  {
+    "ts": 207842,
+    "tid": 332668,
+    "event": "IO_WAIT",
+    "resource": "FD_3",
+    "scenario": "IO_0x59adf41496d3",
+    "addr": "0x3",
+    "duration_us": 25236
+  },
+  {
+    "ts": 208235,
+    "tid": 332668,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "0x0",
+    "duration_us": 31362
+  },
+  {
+    "ts": 208236,
+    "tid": 332668,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 208238,
+    "tid": 332668,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 227081,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25082
+  },
+  {
+    "ts": 227082,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 227083,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 252188,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25102
+  },
+  {
+    "ts": 252190,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 252191,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 277299,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25104
+  },
+  {
+    "ts": 277301,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 277302,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 302410,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25103
+  },
+  {
+    "ts": 302428,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 15
+  },
+  {
+    "ts": 302429,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 306012,
+    "tid": 332670,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "0x0",
+    "duration_us": 254759
+  },
+  {
+    "ts": 311099,
+    "tid": 332670,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5085
+  },
+  {
+    "ts": 311101,
+    "tid": 332670,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 311103,
+    "tid": 332670,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 316213,
+    "tid": 332670,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5098
+  },
+  {
+    "ts": 327564,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25120
+  },
+  {
+    "ts": 327596,
+    "tid": 332672,
+    "event": "LOCK_WAIT",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 21
+  },
+  {
+    "ts": 327607,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 11
+  },
+  {
+    "ts": 349994,
+    "tid": 332671,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "0x0",
+    "duration_us": 248451
+  },
+  {
+    "ts": 352712,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25101
+  },
+  {
+    "ts": 352714,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 352715,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 355094,
+    "tid": 332671,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5098
+  },
+  {
+    "ts": 355096,
+    "tid": 332671,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 355097,
+    "tid": 332671,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 372094,
+    "tid": 332670,
+    "event": "IO_WAIT",
+    "resource": "FD_3",
+    "scenario": "IO_0x59adf41496d3",
+    "addr": "0x3",
+    "duration_us": 55314
+  },
+  {
+    "ts": 372492,
+    "tid": 332670,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "0x0",
+    "duration_us": 61377
+  },
+  {
+    "ts": 372493,
+    "tid": 332670,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 372494,
+    "tid": 332670,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 377597,
+    "tid": 332670,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5095
+  },
+  {
+    "ts": 377802,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25085
+  },
+  {
+    "ts": 378079,
+    "tid": 332672,
+    "event": "LOCK_WAIT",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 247
+  },
+  {
+    "ts": 378117,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 66
+  },
+  {
+    "ts": 390436,
+    "tid": 332669,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "0x0",
+    "duration_us": 238613
+  },
+  {
+    "ts": 395532,
+    "tid": 332669,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5084
+  },
+  {
+    "ts": 395535,
+    "tid": 332669,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 395537,
+    "tid": 332669,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 403199,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25078
+  },
+  {
+    "ts": 403202,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 403203,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 428319,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25112
+  },
+  {
+    "ts": 428321,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 428323,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 434040,
+    "tid": 332670,
+    "event": "IO_WAIT",
+    "resource": "FD_3",
+    "scenario": "IO_0x59adf41496d3",
+    "addr": "0x3",
+    "duration_us": 55909
+  },
+  {
+    "ts": 434090,
+    "tid": 332670,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "0x0",
+    "duration_us": 61587
+  },
+  {
+    "ts": 434091,
+    "tid": 332670,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 434093,
+    "tid": 332670,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 440474,
+    "tid": 332670,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 6372
+  },
+  {
+    "ts": 455207,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 26867
+  },
+  {
+    "ts": 455242,
+    "tid": 332672,
+    "event": "LOCK_WAIT",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 22
+  },
+  {
+    "ts": 455254,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 12
+  },
+  {
+    "ts": 463136,
+    "tid": 332668,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "0x0",
+    "duration_us": 254878
+  },
+  {
+    "ts": 468455,
+    "tid": 332668,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5306
+  },
+  {
+    "ts": 468458,
+    "tid": 332668,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 468460,
+    "tid": 332668,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 480344,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25086
+  },
+  {
+    "ts": 480347,
+    "tid": 332672,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 480348,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 496550,
+    "tid": 332670,
+    "event": "IO_WAIT",
+    "resource": "FD_3",
+    "scenario": "IO_0x59adf41496d3",
+    "addr": "0x3",
+    "duration_us": 55403
+  },
+  {
+    "ts": 497102,
+    "tid": 332670,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "0x0",
+    "duration_us": 63000
+  },
+  {
+    "ts": 497104,
+    "tid": 332670,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 497105,
+    "tid": 332670,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 502221,
+    "tid": 332670,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5105
+  },
+  {
+    "ts": 505524,
+    "tid": 332672,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 25130
+  },
+  {
+    "ts": 505561,
+    "tid": 332672,
+    "event": "LOCK_WAIT",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 23
+  },
+  {
+    "ts": 505576,
+    "tid": 332672,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 15
+  },
+  {
+    "ts": 505582,
+    "tid": 332672,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410eceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 505800,
+    "tid": 332667,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410ece33",
+    "addr": "0x7dad3f3fc6c0",
+    "duration_us": 505064
+  },
+  {
+    "ts": 505801,
+    "tid": 332667,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 505801,
+    "tid": 332667,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 558553,
+    "tid": 332670,
+    "event": "IO_WAIT",
+    "resource": "FD_3",
+    "scenario": "IO_0x59adf41496d3",
+    "addr": "0x3",
+    "duration_us": 55353
+  },
+  {
+    "ts": 559032,
+    "tid": 332670,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "0x0",
+    "duration_us": 61917
+  },
+  {
+    "ts": 559033,
+    "tid": 332670,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 559035,
+    "tid": 332670,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 642506,
+    "tid": 332671,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "0x0",
+    "duration_us": 287389
+  },
+  {
+    "ts": 647609,
+    "tid": 332671,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5102
+  },
+  {
+    "ts": 647611,
+    "tid": 332671,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 647612,
+    "tid": 332671,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 652718,
+    "tid": 332671,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5098
+  },
+  {
+    "ts": 666491,
+    "tid": 332669,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "0x0",
+    "duration_us": 270910
+  },
+  {
+    "ts": 671612,
+    "tid": 332669,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5105
+  },
+  {
+    "ts": 671646,
+    "tid": 332669,
+    "event": "LOCK_WAIT",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 33
+  },
+  {
+    "ts": 671648,
+    "tid": 332669,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 2
+  },
+  {
+    "ts": 716513,
+    "tid": 332668,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "0x0",
+    "duration_us": 248032
+  },
+  {
+    "ts": 721616,
+    "tid": 332668,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5101
+  },
+  {
+    "ts": 721618,
+    "tid": 332668,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 721619,
+    "tid": 332668,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 723581,
+    "tid": 332671,
+    "event": "IO_WAIT",
+    "resource": "FD_3",
+    "scenario": "IO_0x59adf41496d3",
+    "addr": "0x3",
+    "duration_us": 70324
+  },
+  {
+    "ts": 723974,
+    "tid": 332671,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "0x0",
+    "duration_us": 76352
+  },
+  {
+    "ts": 723975,
+    "tid": 332671,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 723976,
+    "tid": 332671,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 726724,
+    "tid": 332668,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5096
+  },
+  {
+    "ts": 752618,
+    "tid": 332668,
+    "event": "IO_WAIT",
+    "resource": "FD_3",
+    "scenario": "IO_0x59adf41496d3",
+    "addr": "0x3",
+    "duration_us": 25342
+  },
+  {
+    "ts": 752974,
+    "tid": 332668,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Prepare_IO",
+    "addr": "0x0",
+    "duration_us": 31346
+  },
+  {
+    "ts": 752982,
+    "tid": 332668,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 8
+  },
+  {
+    "ts": 752983,
+    "tid": 332668,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 752989,
+    "tid": 332668,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410eceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 753057,
+    "tid": 332667,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410ece33",
+    "addr": "0x7dad40bff6c0",
+    "duration_us": 247231
+  },
+  {
+    "ts": 795376,
+    "tid": 332670,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "0x0",
+    "duration_us": 236331
+  },
+  {
+    "ts": 800466,
+    "tid": 332670,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5088
+  },
+  {
+    "ts": 800482,
+    "tid": 332670,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 0
+  },
+  {
+    "ts": 800483,
+    "tid": 332670,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 800486,
+    "tid": 332670,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410eceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 907052,
+    "tid": 332669,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "0x0",
+    "duration_us": 235389
+  },
+  {
+    "ts": 912160,
+    "tid": 332669,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5105
+  },
+  {
+    "ts": 912163,
+    "tid": 332669,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 912164,
+    "tid": 332669,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 912168,
+    "tid": 332669,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410eceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 912256,
+    "tid": 332667,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410ece33",
+    "addr": "0x7dad403fe6c0",
+    "duration_us": 159197
+  },
+  {
+    "ts": 912259,
+    "tid": 332667,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410ece33",
+    "addr": "0x7dad379ff6c0",
+    "duration_us": 0
+  },
+  {
+    "ts": 955196,
+    "tid": 332671,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "Heavy_Calculation",
+    "addr": "0x0",
+    "duration_us": 231210
+  },
+  {
+    "ts": 960307,
+    "tid": 332671,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x59adf414a469",
+    "addr": "0x0",
+    "duration_us": 5108
+  },
+  {
+    "ts": 960309,
+    "tid": 332671,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d6f",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 960310,
+    "tid": 332671,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x59adf4152160",
+    "scenario": "Func_0x59adf4149d9e",
+    "addr": "0x59adf4152160",
+    "duration_us": 1
+  },
+  {
+    "ts": 960314,
+    "tid": 332671,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410eceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 960491,
+    "tid": 332667,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x7dad410ece33",
+    "addr": "0x7dad3fbfd6c0",
+    "duration_us": 48232
+  }
+]

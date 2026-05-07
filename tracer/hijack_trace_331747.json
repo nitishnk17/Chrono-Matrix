@@ -1,0 +1,101 @@
+[
+  {
+    "ts": 293,
+    "tid": 331748,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x733196ceceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 50437,
+    "tid": 331748,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x5e846126f486",
+    "addr": "0x0",
+    "duration_us": 50116
+  },
+  {
+    "ts": 50488,
+    "tid": 331748,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x5e8461273160",
+    "scenario": "Func_0x5e846126f854",
+    "addr": "0x5e8461273160",
+    "duration_us": 17
+  },
+  {
+    "ts": 150771,
+    "tid": 331747,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x5e846126f6b5",
+    "addr": "0x0",
+    "duration_us": 150388
+  },
+  {
+    "ts": 150815,
+    "tid": 331747,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x5e8461273160",
+    "scenario": "Func_0x5e846126f854",
+    "addr": "0x5e8461273160",
+    "duration_us": 0
+  },
+  {
+    "ts": 150816,
+    "tid": 331747,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x5e8461273160",
+    "scenario": "Func_0x5e846126f883",
+    "addr": "0x5e8461273160",
+    "duration_us": 1
+  },
+  {
+    "ts": 150898,
+    "tid": 331748,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x5e84612731a0",
+    "scenario": "Func_0x5e846126f7cb",
+    "addr": "0x5e84612731a0",
+    "duration_us": 100401
+  },
+  {
+    "ts": 251920,
+    "tid": 331748,
+    "event": "IO_WAIT",
+    "resource": "FD_3",
+    "scenario": "IO_0x5e846126f5d9",
+    "addr": "0x3",
+    "duration_us": 100349
+  },
+  {
+    "ts": 251960,
+    "tid": 331748,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x5e8461273160",
+    "scenario": "Func_0x5e846126f883",
+    "addr": "0x5e8461273160",
+    "duration_us": 201472
+  },
+  {
+    "ts": 251996,
+    "tid": 331748,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x733196ceceb1",
+    "addr": "(nil)",
+    "duration_us": 1
+  },
+  {
+    "ts": 252133,
+    "tid": 331747,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x733196cece33",
+    "addr": "0x7331967ff6c0",
+    "duration_us": 101292
+  }
+]
