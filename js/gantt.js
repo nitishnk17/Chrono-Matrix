@@ -24,6 +24,8 @@ const GanttChart = (() => {
      let selectedThread = null;
      let tooltip;
      let innerW, innerH;
+     let currentTransform = d3.zoomIdentity;
+     let xBase, xAxisGroup, zoomBehavior;
 
      // Canvas
      let canvas, ctx, dpr;
@@ -32,7 +34,7 @@ const GanttChart = (() => {
      let ovSvg, ovBrush, ovBrushGroup, xOv;
 
      // Event Filters — Birth/Death always shown, not toggleable
-     let activeEventTypes = new Set(['COMPUTE', 'SLEEP', 'IO_WAIT', 'COND_WAIT', 'THREAD_JOIN', 'LOCK_ACQUIRE', 'LOCK_WAIT', 'LOCK_RELEASE', 'THREAD_START', 'THREAD_END', 'DEADLOCK_DETECTED']);
+     let activeEventTypes = new Set(['COMPUTE', 'SLEEP', 'IO_WAIT', 'COND_WAIT', 'THREAD_JOIN', 'LOCK_ACQUIRE', 'LOCK_WAIT', 'LOCK_WAIT_TIMEOUT', 'LOCK_RELEASE', 'THREAD_START', 'THREAD_END', 'DEADLOCK_DETECTED', 'MEM_READ', 'MEM_WRITE', 'MEM_ALLOC', 'MEM_FREE']);
 
      // rAF
      let rafPending = false;
@@ -42,11 +44,17 @@ const GanttChart = (() => {
 
      // ── Helpers ──────────────────────────────────────────────
      let tOrigin = 0;  // set to min timestamp, so axis shows relative time
-     function formatUs(v) {
-          const rel = v - tOrigin;
+     function formatTimeUs(ts) {
+          const rel = ts - tOrigin;
           if (rel >= 1e6) return (rel / 1e6).toFixed(2) + 's';
           if (rel >= 1e3) return (rel / 1e3).toFixed(1) + 'ms';
           return rel.toFixed(0) + 'µs';
+     }
+
+     function formatDurationUs(us) {
+          if (us >= 1e6) return (us / 1e6).toFixed(2) + 's';
+          if (us >= 1e3) return (us / 1e3).toFixed(1) + 'ms';
+          return us.toFixed(0) + 'µs';
      }
 
      function sample(data, n) {
@@ -179,7 +187,7 @@ const GanttChart = (() => {
 
           ovG.append('g').attr('class', 'axis')
                .attr('transform', `translate(0,${ovInH})`)
-               .call(d3.axisBottom(xOv).ticks(6).tickFormat(formatUs));
+               .call(d3.axisBottom(xOv).ticks(6).tickFormat(formatTimeUs));
 
           ovG.append('text')
                .attr('x', innerW / 2).attr('y', ovInH + 24)
@@ -225,7 +233,6 @@ const GanttChart = (() => {
           // Visible data domain for culling
           const visT0 = xBase.invert(-tx / tk);
           const visT1 = xBase.invert((innerW - tx) / tk);
-          const minW = 1.5 / tk; // minimum bar width in data units
 
           // --- Grid lines first (behind bars) ---
           const rescaled = currentTransform.rescaleX(xBase);
@@ -256,11 +263,10 @@ const GanttChart = (() => {
           // We will search for events ending after or exactly at `visT0`, minus some fudge for extremely long events.
           const bisectData = d3.bisector(d => d.ts).left;
 
-          // To account for events that start before visT0 but end after, we back up the search bound by 10 seconds.
-          // This ensures long-running events aren't artificially clipped out of the left-hand screen.
-          const maxExpectedEventDurationUs = 10000000; // 10s buffer
-          let startIndex = bisectData(renderingData, visT0 - maxExpectedEventDurationUs);
-          let endIndex = bisectData(renderingData, visT1);
+          // Back up the search bound by the longest visible duration so long events are not clipped out.
+          const maxExpectedEventDurationUs = Math.max(1, d3.max(renderingData, d => d.duration_us) || 0);
+          let startIndex = bisectData(renderingData, Math.max(0, visT0 - maxExpectedEventDurationUs));
+          let endIndex = bisectData(renderingData, visT1 + maxExpectedEventDurationUs);
 
           for (let i = startIndex; i <= endIndex && i < renderingData.length; i++) {
                const d = renderingData[i];
@@ -270,7 +276,8 @@ const GanttChart = (() => {
                let startT = Math.max(0, d.ts - d.duration_us);
 
                // Special handling for discrete point-in-time events
-               if (d.event === 'LOCK_RELEASE' || d.event === 'THREAD_START' || d.event === 'THREAD_END') {
+               if (d.event === 'LOCK_RELEASE' || d.event === 'THREAD_START' || d.event === 'THREAD_END' ||
+                    d.event === 'MEM_READ' || d.event === 'MEM_WRITE' || d.event === 'MEM_ALLOC' || d.event === 'MEM_FREE') {
                     startT = Math.max(0, d.ts - 1);
                }
 
@@ -303,7 +310,7 @@ const GanttChart = (() => {
      }
 
      function refreshXAxis(scl) {
-          xAxisGroup.call(d3.axisBottom(scl).ticks(8).tickFormat(formatUs));
+          xAxisGroup.call(d3.axisBottom(scl).ticks(8).tickFormat(formatTimeUs));
      }
 
      // ── Zoom handler ──────────────────────────────────────────
@@ -393,8 +400,9 @@ const GanttChart = (() => {
                 <div class="tt-row"><span class="tt-key">Thread</span><span class="tt-val">T-${bar.tid}</span></div>
                 <div class="tt-row"><span class="tt-key">Resource</span><span class="tt-val">${bar.resource}</span></div>
                 <div class="tt-row"><span class="tt-key">Addr</span><span class="tt-val">${bar.addr}</span></div>
-                <div class="tt-row"><span class="tt-key">Duration</span><span class="tt-val">${formatUs(bar.duration_us)}</span></div>
-                <div class="tt-row"><span class="tt-key">Scenario</span><span class="tt-val">${bar.scenario.replace(/_/g, ' ')}</span></div>
+                ${bar.size ? `<div class="tt-row"><span class="tt-key">Size</span><span class="tt-val">${bar.size} B</span></div>` : ''}
+                <div class="tt-row"><span class="tt-key">Duration</span><span class="tt-val">${formatDurationUs(bar.duration_us)}</span></div>
+                <div class="tt-row"><span class="tt-key">Scenario</span><span class="tt-val">${(bar.scenario || 'uncategorized').replace(/_/g, ' ')}</span></div>
             `;
                tooltip.style.left = Math.min(event.clientX + 14, window.innerWidth - 280) + 'px';
                tooltip.style.top = Math.max(event.clientY - 10, 10) + 'px';

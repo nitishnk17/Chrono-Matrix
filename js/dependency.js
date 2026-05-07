@@ -128,7 +128,7 @@ const DependencyGraph = (() => {
           // First pass: Track successful acquisitions and releases to find ownership intervals
           let ownerships = [];
           for (let d of sorted) {
-               // Both ACQUIRE and WAIT mean the thread successfully got the lock at `d.ts`
+               // Only successful acquisitions start an ownership interval.
                if (d.event === 'LOCK_ACQUIRE' || d.event === 'LOCK_WAIT') {
                     // The hold starts exactly when the wait/acquire finishes
                     lockState[d.resource] = { ownerTid: d.tid, startT: d.ts };
@@ -158,7 +158,7 @@ const DependencyGraph = (() => {
 
           // Second pass: Find waiters and map them to the owner at that time
           for (let d of sorted) {
-               if (d.event === 'LOCK_WAIT') {
+               if (d.event === 'LOCK_WAIT' || d.event === 'LOCK_WAIT_TIMEOUT' || d.event === 'COND_WAIT') {
                     let waitStart = d.ts - d.duration_us;
                     let waitEnd = d.ts;
 

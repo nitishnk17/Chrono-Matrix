@@ -1,182 +1,330 @@
-# ⚡ Chrono-Matrix
-### 2D Visual Analytics System for OS/HPC Thread Contention
+# Chrono-Matrix
+### 2D Visual Analytics for Multithreaded Execution
 
-> A "Cinematic MRI" for parallel software — real C++ execution traces visualized as an interactive 2D analytics dashboard.
+Chrono-Matrix turns real thread execution into an interactive dashboard for reading:
+
+- temporal behavior
+- spatial memory activity
+- lock contention
+- deadlocks
+- per-thread performance cost
+
+The core idea is simple:
+
+1. instrument a C++ target with the tracer hooks
+2. run it with the LD_PRELOAD hijacker
+3. load the emitted JSON trace into the dashboard
+
+The existing 3D visualizations are still part of the project and remain available as
+alternative exploration views. The new 2D work adds a clearer temporal + spatial story
+without removing the teammate-built 3D pages.
 
 ---
 
-## 🧩 What It Does
+## Project Layout
 
-Chrono-Matrix fetches **real multi-threaded execution data** by compiling and running a C++ tracer program, then visualizes that data in a coordinated 2D web dashboard. It helps diagnose:
-
-- **Lock Contention** — which threads block each other and for how long
-- **Deadlocks** — threads waiting forever on mutexes in circular dependency
-- **False Sharing** — adjacent memory cache-line thrashing under high thread count
-
----
-
-## 🗂️ Project Structure
-
-```
-ThreadVis/
-├── index.html              ← Main dashboard entry point
-├── README.md
-│
+```text
+Chrono-Matrix/
+├── index.html
 ├── css/
-│   └── style.css           ← Sci-fi dark glassmorphism UI theme
-│
+│   └── style.css
 ├── js/
-│   ├── eventbus.js         ← Pub/sub cross-view event coordination
-│   ├── gantt.js            ← Thread Timeline chart (zoom/pan + brush)
-│   ├── heatmap.js          ← Memory address contention heatmap
-│   ├── chord.js            ← Lock contention chord diagram
-│   ├── stats.js            ← Per-thread event summary panel
-│   └── main.js             ← Orchestrator (loads data, wires views)
-│
+│   ├── eventbus.js
+│   ├── gantt.js
+│   ├── heatmap.js
+│   ├── atlas.js
+│   ├── chord.js
+│   ├── stats.js
+│   ├── overview.js
+│   ├── profiler.js
+│   ├── lockstats.js
+│   ├── dependency.js
+│   ├── timeline3d.js
+│   ├── galaxy3d.js
+│   └── flow3d.js
+├── scripts/
+│   ├── generate_sample_trace.mjs
+│   └── generate_many_thread_trace.mjs
+├── datasets/
+│   ├── many-thread-trace.json
+│   └── many-thread-trace.js
+├── sample-trace.json
+├── sample-trace.js
 └── tracer/
-    ├── tracer.cpp          ← C++ multi-threaded trace generator (source)
-    ├── tracer              ← Compiled binary (generated)
-    └── trace.json          ← 48,902-event execution trace (generated)
+    ├── cm_annotate.h
+    ├── cm_hijacker.cpp
+    ├── producer_consumer.cpp
+    ├── uneven_work_distribution.cpp
+    ├── master_multithread.cpp
+    ├── deadlock.cpp
+    ├── wound_wait.cpp
+    └── lock_free_counter.cpp
 ```
 
 ---
 
-## 🚀 Quick Start
+## What The Tracer Does
 
-The repository already includes a bundled sample dataset in [sample-trace.json](/Users/nitishkumar/Downloads/IIT Delhi/InformationVis/Project copy/TODO/sample-trace.json) and [sample-trace.js](/Users/nitishkumar/Downloads/IIT Delhi/InformationVis/Project copy/TODO/sample-trace.js), so you can open the app and click `Load Sample Trace` without compiling the tracer first.
+The tracer is an `LD_PRELOAD` shared library that intercepts common thread and blocking APIs:
 
-### Step 1 — Build & Run the C++ Tracer
+- `pthread_mutex_lock`
+- `pthread_mutex_unlock`
+- `pthread_create`
+- `pthread_join`
+- `pthread_cond_wait`
+- `pthread_cond_timedwait`
+- `read`, `write`, `recv`, `send`
+- sleep calls such as `nanosleep`, `clock_nanosleep`, `usleep`
+
+It also exposes source-level hooks so your code can annotate important work directly:
+
+- `CM_COMPUTE("scenario")`
+- `CM_MEM_ACCESS(addr, size, kind, scenario)`
+- `CM_DEADLOCK_DETECTED(resource, scenario)` when a timed lock attempt times out
+
+The tracer writes one JSON trace per process, named:
+
+- `<program-name>.json`
+
+The file is written in the current working directory of the launched program.
+
+---
+
+## How To Use The Tracer
+
+### 1. Build the hijacker
+
+From the project root:
 
 ```bash
-cd tracer
-
-# Compile
-g++ -std=c++17 -O2 -pthread tracer.cpp -o tracer
-
-# Generate the trace data
-./tracer > trace.json
+g++ -std=c++17 -O2 -fPIC -shared tracer/cm_hijacker.cpp -o tracer/libcmhijack.so -ldl -pthread
 ```
 
-Expected output on stderr:
-```
-[tracer] Running Scenario 1: Producer-Consumer (8 threads)...
-[tracer] Running Scenario 2: Deadlock Detection (2 threads)...
-[tracer] Running Scenario 3: False Sharing (8 threads)...
-[tracer] Done. Total events: 48902
+This creates the shared library used with `LD_PRELOAD`.
+
+### 2. Instrument your C++ target
+
+Include the hook header:
+
+```cpp
+#include "cm_annotate.h"
 ```
 
-### Step 2 — Serve the Dashboard
+Use the macros around important work:
+
+```cpp
+CM_COMPUTE("worker_step");
+CM_MEM_ACCESS(ptr, sizeof(*ptr), "MEM_READ", "load_row");
+CM_MEM_ACCESS(ptr, sizeof(*ptr), "MEM_WRITE", "publish_result");
+```
+
+Recommended event kinds:
+
+- `MEM_READ`
+- `MEM_WRITE`
+- `MEM_ALLOC`
+- `MEM_FREE`
+
+### 3. Compile the target with `-ldl`
+
+Any source file that uses `cm_annotate.h` should link with `-ldl`:
 
 ```bash
-# From the ThreadVis/ root directory
-cd ..
+g++ -std=c++17 -O2 -pthread tracer/producer_consumer.cpp -o tracer/producer_consumer -ldl
+```
+
+### 4. Run the target under the tracer
+
+Run the binary with `LD_PRELOAD` pointing to the hijacker:
+
+```bash
+LD_PRELOAD=./tracer/libcmhijack.so ./tracer/deadlock
+```
+
+When the program exits, the tracer writes a file like:
+
+```text
+deadlock.json
+```
+
+### 5. Load the trace into the dashboard
+
+Open the dashboard from a static server:
+
+```bash
 python3 -m http.server 8787
 ```
 
-### Step 3 — Open in Browser
+Then visit:
 
-```
+```text
 http://localhost:8787
 ```
 
----
+Use one of these:
 
-## 📊 Dashboard Panels
-
-| Panel | Description |
-|---|---|
-| **Thread Timeline (Gantt)** | All threads × time. Color-coded by event type. Scroll to zoom, drag to pan, double-click to reset. |
-| **Overview Strip (Brush)** | Mini-timeline below the Gantt. Drag to select a time window — all other views filter to it. |
-| **Memory Contention Heatmap** | 60×24 time × memory-address grid. Heat intensity = number of lock-wait events. |
-| **Lock Contention Chord** | Thread nodes connected by chords proportional to shared lock-wait time. |
-| **Thread Event Analysis** | Aggregate stats + per-thread compute vs. wait stacked bars, sorted by worst waiter. |
-
-### Event Color Legend
-
-| Color | Event |
-|---|---|
-| 🟢 Green `#39ff14` | `COMPUTE` |
-| 🟡 Amber `#ffb300` | `LOCK_ACQUIRE` |
-| 🔴 Red `#ff3366` | `LOCK_WAIT` / blocking |
-| 🔵 Cyan `#00f5ff` | `LOCK_RELEASE` |
-| 🟣 Purple `#c84bff` | `DEADLOCK_DETECTED` |
+- `Load Sample Trace`
+- drag and drop your JSON trace
+- use the top-bar file upload
 
 ---
 
-## 🔬 Simulated Scenarios
+## Bundled Sample Data
 
-### 1. Producer-Consumer *(Threads T-0 to T-7)*
-4 producers and 4 consumers share a mutex-protected bounded queue. Traces show lock contention spikes when the queue is full (producers block) or empty (consumers block).
+The repo includes ready-to-load sample traces:
 
-### 2. Deadlock *(Threads T-10, T-11)*
-Two threads attempt to acquire two mutexes in opposite order (classic AB / BA deadlock). A `std::timed_mutex::try_lock_for()` detects the deadlock after an 80ms timeout and emits a `DEADLOCK_DETECTED` event. **T-11 shows the highest wait time (~80ms).**
+- `sample-trace.json`
+- `sample-trace.js`
+- `datasets/many-thread-trace.json`
+- `datasets/many-thread-trace.js`
 
-### 3. False Sharing *(Threads T-20 to T-27)*
-8 threads write to adjacent fields of a `alignas(64)` struct — all within the same CPU cache line. This causes heavy cache coherence traffic modeled as high-frequency lock contention visible in the heatmap.
+Regenerate them with:
 
----
+```bash
+node scripts/generate_sample_trace.mjs
+node scripts/generate_many_thread_trace.mjs
+```
 
-## 🕹️ Interactive Features
+You can also build and run any of the standard demos in `tracer/` directly:
 
-| Interaction | Effect |
-|---|---|
-| **Scroll** on Gantt | Zoom in/out on the time axis |
-| **Drag** on Gantt background | Pan left/right |
-| **Double-click** on Gantt | Reset zoom to full view |
-| **Drag** on Overview strip | Select time range → filters Heatmap, Chord, Stats |
-| **Click** on a Gantt bar | Select thread → highlights in Chord diagram |
-| **Click** on Chord arc | Select thread → cross-highlight |
-| **Scenario Pills** | Filter all 4 views to one scenario at a time |
-| **↺ Reset All Filters** | Clears scenario, time-range, and thread selection |
+```bash
+g++ -std=c++17 -O2 -pthread tracer/deadlock.cpp -o tracer/deadlock -ldl
+LD_PRELOAD=./tracer/libcmhijack.so ./tracer/deadlock
+```
 
----
+For a single end-to-end trace that exercises almost every part of the dashboard,
+use the master workload:
 
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Data Generation | C++17, `std::thread`, `std::mutex`, `std::timed_mutex` |
-| Visualization | D3.js v7 (CDN) |
-| Frontend | Vanilla HTML / CSS / JavaScript (no framework) |
-| Fonts | Google Fonts — Orbitron, Inter, JetBrains Mono |
-| Coordination | Custom pub/sub EventBus (`js/eventbus.js`) |
-
----
-
-## 📦 Requirements
-
-- **C++ compiler**: `g++` with C++17 and pthreads (`-pthread`)
-- **Python 3**: for `http.server` (or any static file server)
-- **Browser**: Any modern browser (Chrome/Firefox recommended)
-- **Internet**: D3.js loaded from CDN (`cdn.jsdelivr.net`)
-
----
-
-## 📖 Trace JSON Format
-
-Each event in `trace.json` has the following schema:
-
-```json
-{
-  "ts":          1234567,           // microsecond timestamp (relative to trace start)
-  "tid":         2,                 // logical thread ID
-  "event":       "LOCK_WAIT",       // COMPUTE | LOCK_ACQUIRE | LOCK_WAIT | LOCK_RELEASE | DEADLOCK_DETECTED
-  "resource":    "q_mutex",         // mutex or condition variable name
-  "addr":        "0xAA001040",      // simulated memory address (cache-line bucket)
-  "duration_us": 450,               // how long this event lasted (microseconds)
-  "scenario":    "producer_consumer" // producer_consumer | deadlock | false_sharing
-}
+```bash
+g++ -std=c++17 -O2 -pthread tracer/master_multithread.cpp -o tracer/master_multithread -ldl
+LD_PRELOAD=./tracer/libcmhijack.so ./tracer/master_multithread
 ```
 
 ---
 
-## 🎓 Academic Context
+## Dashboard Views
 
-**Course:** Information Visualization — Semester 2  
-**Topic:** Diagnosing Parallel Execution Bottlenecks through 2D Visual Analytics  
-**Technique:** Coordinated Multiple Views (CMV) — linking a temporal scrubber to a spatial memory contention renderer
+| View | Purpose |
+|---|---|
+| Overview | System summary and event distribution |
+| Thread Timeline | Time-based execution lanes with zoom and pan |
+| Memory Analysis | Address contention heatmap and hottest addresses |
+| Trace Atlas | Side-by-side temporal and spatial view |
+| Lock Contention | Mutex pressure and dependency structure |
+| Thread Profiler | Per-thread compute vs wait breakdown |
+| Dependency Graph | Wait-for relationships over time |
+| 3D Views | Existing teammate-built exploratory views kept functional |
 
-### Key Insights Visualized
-- A **purple bar on T-11** in the Gantt = the deadlock wait event (80ms blocked)
-- A **hot red band at `0xCC003000`** in the heatmap = false-sharing cache-line thrashing
-- **Thick chords between T-0/T-4** in the chord diagram = producer-consumer mutex contention
+The new `Trace Atlas` is the best view for reading temporal and spatial behavior together:
+
+- left panel: thread activity over time
+- right panel: address activity over time
+- clicking a lane or cell selects the same thread everywhere
+
+The 3D views remain available for exploration:
+
+- `Spatial Timeline`
+- `Thread Galaxy`
+- `Flow Field`
+
+They are still wired through the main dashboard router and can be used alongside the 2D views.
+
+---
+
+## Event Schema
+
+Every trace event is a JSON object with this shape:
+
+```json
+{
+  "ts": 1234567,
+  "tid": 2,
+  "event": "LOCK_WAIT",
+  "resource": "q_mutex",
+  "addr": "0xAA001040",
+  "size": 64,
+  "duration_us": 450,
+  "scenario": "producer_consumer"
+}
+```
+
+### Field Notes
+
+- `ts`: timestamp in microseconds
+- `tid`: logical thread id
+- `event`: event kind
+- `resource`: mutex, condition variable, or logical resource name
+- `addr`: address as a hex string
+- `size`: bytes touched for memory events, `0` otherwise
+- `duration_us`: event duration in microseconds
+- `scenario`: logical scenario name
+
+Supported event kinds:
+
+- `COMPUTE`
+- `LOCK_ACQUIRE`
+- `LOCK_WAIT`
+- `LOCK_RELEASE`
+- `THREAD_START`
+- `THREAD_END`
+- `THREAD_JOIN`
+- `COND_WAIT`
+- `IO_WAIT`
+- `SLEEP`
+- `DEADLOCK_DETECTED`
+- `MEM_READ`
+- `MEM_WRITE`
+- `MEM_ALLOC`
+- `MEM_FREE`
+
+---
+
+## Included Example Programs
+
+### `tracer/producer_consumer.cpp`
+
+Standard producer-consumer demo with a bounded buffer, producer threads, consumer threads, and memory annotations.
+
+### `tracer/uneven_work_distribution.cpp`
+
+Uneven workload demo where threads finish at different times so the dashboard shows load imbalance clearly.
+
+### `tracer/deadlock.cpp`
+
+Classic AB / BA deadlock demo that emits `DEADLOCK_DETECTED` when the second timed lock attempt times out.
+
+### `tracer/wound_wait.cpp`
+
+Wound-wait prevention demo where the older thread can force the younger thread to back off instead of deadlocking.
+
+### `tracer/lock_free_counter.cpp`
+
+Lock-free counter demo showing how atomic operations can remove the need for mutual exclusion.
+
+---
+
+## What To Expect In The UI
+
+- `DEADLOCK_DETECTED` appears as a deadlock warning and updates the deadlock badge.
+- `LOCK_WAIT` shows blocking duration.
+- `MEM_READ` and `MEM_WRITE` appear in the timeline, heatmap, and atlas.
+- The heatmap shows spatial hotspots by address bucket and time bucket.
+- The atlas combines time and space in one readable layout.
+
+---
+
+## Requirements
+
+- `g++` with C++17
+- `pthread`
+- `ldl` for targets using `cm_annotate.h`
+- Python 3 for the static file server
+- A modern browser
+
+---
+
+## Notes
+
+- The dashboard accepts both bundled sample traces and traces emitted by your own target.
+- If you use `CM_MEM_ACCESS`, make sure the addresses you pass are stable and meaningful for the thing you want to visualize.
+- If your target is a black box, you can still feed the dashboard with a JSON trace generated by another tool as long as it matches the schema above.

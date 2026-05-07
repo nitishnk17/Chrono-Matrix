@@ -14,6 +14,7 @@
           overview:   { title: 'Overview',         sub: 'System summary, key metrics, and the dominant performance signals', tab1: 'Overview',          tab2: 'Summary view',       tab3: 'Trace loaded' },
           timeline:   { title: 'Thread Timeline',  sub: 'Zoom, pan, and isolate thread activity across the execution window', tab1: 'Threads',           tab2: 'Execution lanes',    tab3: 'Interactive' },
           memory:     { title: 'Memory Analysis',  sub: 'Cache-line contention heatmap and hottest address ranges', tab1: 'Memory',            tab2: 'Hotspot view',       tab3: 'Contention aware' },
+          atlas:      { title: 'Trace Atlas',      sub: 'Side-by-side temporal thread lanes and spatial address hotspots', tab1: 'Atlas',             tab2: 'Space-time view',    tab3: 'Integrated' },
           contention: { title: 'Lock Contention',  sub: 'Mutex pressure, blockers, and inter-thread wait topology', tab1: 'Locks',             tab2: 'Wait topology',      tab3: 'Critical blockers' },
           profiler:   { title: 'Thread Profiler',  sub: 'Per-thread compute versus wait signatures and distribution breakdown', tab1: 'Profiler',          tab2: 'Per-thread focus',   tab3: 'Distribution' },
           dependency: { title: 'Dependency Graph', sub: 'Interactive topology of thread influence through time', tab1: 'Dependencies',      tab2: 'Causal graph',       tab3: 'Time scrubber' },
@@ -40,6 +41,9 @@
                case 'memory':
                     HeatmapChart.triggerResize?.();
                     break;
+               case 'atlas':
+                    AtlasChart.triggerResize?.();
+                    break;
                case 'contention':
                     ChordChart.triggerResize?.();
                     LockStats.triggerResize?.();
@@ -51,13 +55,13 @@
                     DependencyGraph.triggerResize?.();
                     break;
                case 'timeline3d':
-                    Timeline3D.resize();
+                    Timeline3D?.resize?.();
                     break;
                case 'galaxy3d':
-                    GalaxyViz.resize();
+                    GalaxyViz?.resize?.();
                     break;
                case 'flow3d':
-                    FlowViz.resize();
+                    FlowViz?.resize?.();
                     break;
           }
      }
@@ -87,9 +91,9 @@
 
           // Stop any running 3D animation when leaving to another page
           if (active3dPage && active3dPage !== pageId) {
-               if (active3dPage === 'galaxy3d')   GalaxyViz.stop();
-               if (active3dPage === 'flow3d')     FlowViz.stop();
-               if (active3dPage === 'timeline3d') Timeline3D.stop();
+               if (active3dPage === 'galaxy3d')   GalaxyViz?.stop?.();
+               if (active3dPage === 'flow3d')     FlowViz?.stop?.();
+               if (active3dPage === 'timeline3d') Timeline3D?.stop?.();
                active3dPage = null;
           }
 
@@ -97,6 +101,7 @@
           if (!initialized[pageId]) {
                initialized[pageId] = true;
                if (pageId === 'memory') HeatmapChart.triggerResize?.();
+               if (pageId === 'atlas') AtlasChart.triggerResize?.();
                if (pageId === 'contention') { ChordChart.triggerResize?.(); LockStats.triggerResize?.(); }
                if (pageId === 'dependency') DependencyGraph.triggerResize?.();
           }
@@ -105,15 +110,21 @@
           // so the page div is fully visible and has proper layout dimensions
           if (pageId === 'timeline3d') {
                active3dPage = 'timeline3d';
-               requestAnimationFrame(() => requestAnimationFrame(() => Timeline3D.start()));
+               requestAnimationFrame(() => requestAnimationFrame(() => {
+                    if (currentPageId === 'timeline3d') Timeline3D?.start?.();
+               }));
           }
           if (pageId === 'galaxy3d') {
                active3dPage = 'galaxy3d';
-               requestAnimationFrame(() => requestAnimationFrame(() => GalaxyViz.start()));
+               requestAnimationFrame(() => requestAnimationFrame(() => {
+                    if (currentPageId === 'galaxy3d') GalaxyViz?.start?.();
+               }));
           }
           if (pageId === 'flow3d') {
                active3dPage = 'flow3d';
-               requestAnimationFrame(() => requestAnimationFrame(() => FlowViz.start()));
+               requestAnimationFrame(() => requestAnimationFrame(() => {
+                    if (currentPageId === 'flow3d') FlowViz?.start?.();
+               }));
           }
      }
 
@@ -152,7 +163,7 @@
                return event.addr;
           }
 
-          const contentionEvents = new Set(['LOCK_WAIT', 'LOCK_ACQUIRE', 'LOCK_RELEASE', 'DEADLOCK_DETECTED']);
+          const contentionEvents = new Set(['LOCK_WAIT', 'LOCK_WAIT_TIMEOUT', 'LOCK_ACQUIRE', 'LOCK_RELEASE', 'DEADLOCK_DETECTED', 'COND_WAIT']);
           if (!contentionEvents.has(event.event) && !event.resource) {
                return '';
           }
@@ -183,6 +194,7 @@
                     event,
                     resource: typeof d?.resource === 'string' ? d.resource : '',
                     addr: typeof d?.addr === 'string' ? d.addr : '',
+                    size: Math.max(0, Number(d?.size) || 0),
                     duration_us: duration,
                     scenario: typeof d?.scenario === 'string' && d.scenario.trim() ? d.scenario : 'uncategorized',
                     __index: index
@@ -231,6 +243,7 @@
           tryInit('Overview',    () => OverviewCharts.init(data));
           tryInit('Gantt',       () => GanttChart.init(data, tooltip));
           tryInit('Heatmap',     () => HeatmapChart.init(data, tooltip));
+          tryInit('Atlas',       () => AtlasChart.init(data, tooltip));
           tryInit('Chord',       () => ChordChart.init(data, tooltip));
           tryInit('Stats',       () => StatsPanel.init(data));
           tryInit('Profiler',    () => ProfilerCharts.init(data));
@@ -262,9 +275,9 @@
           }
 
           // ── Stop any running 3D animations before navigating away ──
-          Timeline3D.stop();
-          GalaxyViz.stop();
-          FlowViz.stop();
+          Timeline3D?.stop?.();
+          GalaxyViz?.stop?.();
+          FlowViz?.stop?.();
 
           // Reset 3D initialization state so they re-start cleanly on next visit
           delete initialized['timeline3d'];

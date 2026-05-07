@@ -2695,9 +2695,58 @@ body {
 .ov-charts-row,
 .ov-bottom-row,
 .mem-layout,
+.atlas-layout,
 .contention-layout,
 .profiler-layout {
     gap: 16px;
+}
+
+.atlas-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
+    align-items: stretch;
+}
+
+.atlas-guide {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.atlas-guide-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(132, 147, 150, 0.14);
+    color: var(--text-secondary);
+    font-family: var(--font-code);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.atlas-guide-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+.atlas-guide-dot-time {
+    background: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.14);
+}
+
+.atlas-guide-dot-space {
+    background: var(--amber);
+    box-shadow: 0 0 0 3px rgba(255, 199, 105, 0.14);
+}
+
+.atlas-guide-dot-click {
+    background: var(--green);
+    box-shadow: 0 0 0 3px rgba(47, 248, 1, 0.14);
 }
 
 .event-filter-row {
@@ -4293,24 +4342,31 @@ svg text {
 }
 
 .mem-layout,
+.atlas-layout,
 .contention-layout,
 .profiler-layout {
     align-items: stretch;
 }
 
 .mem-heatmap-panel,
+.atlas-time-panel,
+.atlas-space-panel,
 .chord-big-panel,
 .profiler-main-panel {
     min-height: clamp(580px, 72vh, 860px) !important;
 }
 
 .mem-rank-panel,
+.atlas-time-panel,
+.atlas-space-panel,
 .contention-right-col > .panel,
 .profiler-right-col > .panel {
     min-height: 0;
 }
 
 #heatmap-chart,
+#atlas-time-chart,
+#atlas-space-chart,
 #chord-chart,
 #profiler-area-chart {
     min-height: clamp(520px, 62vh, 780px) !important;
@@ -4346,9 +4402,14 @@ svg text {
 @media (max-width: 1280px) {
     .ov-bottom-row,
     .mem-layout,
+    .atlas-layout,
     .contention-layout,
     .profiler-layout {
         grid-template-columns: 1fr !important;
+    }
+
+    .atlas-guide {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -4408,9 +4469,16 @@ svg text {
         font-size: 0.58rem !important;
     }
 
+    .atlas-guide-item {
+        font-size: 0.58rem !important;
+        padding: 9px 10px !important;
+    }
+
     .ov-density-panel,
     .ov-bottom-row > .panel,
     .mem-heatmap-panel,
+    .atlas-time-panel,
+    .atlas-space-panel,
     .chord-big-panel,
     .profiler-main-panel {
         min-height: 520px !important;
@@ -4420,6 +4488,8 @@ svg text {
     #waiters-chart,
     #evtype-chart,
     #heatmap-chart,
+    #atlas-time-chart,
+    #atlas-space-chart,
     #chord-chart,
     #profiler-area-chart,
     #dependency-chart {
@@ -4445,6 +4515,8 @@ svg text {
     #waiters-chart,
     #evtype-chart,
     #heatmap-chart,
+    #atlas-time-chart,
+    #atlas-space-chart,
     #chord-chart,
     #profiler-area-chart,
     #dependency-chart {

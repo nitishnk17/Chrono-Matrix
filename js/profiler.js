@@ -148,7 +148,7 @@ const ProfilerCharts = (() => {
           g.append('text').attr('transform', 'rotate(-90)').attr('x', -iH / 2).attr('y', -50).attr('text-anchor', 'middle').attr('fill', '#94a3b8').attr('font-size', '10px').attr('font-family', 'JetBrains Mono, monospace').text('DURATION (µs)');
 
           // Legend
-          [[`T-${selectedTid} COMPUTE`, '#4caf50'], [`T-${selectedTid} WAIT`, '#e53935'], [`T-${selectedTid} SLEEP`, '#9e9e9e'], [`T-${selectedTid} COND`, '#f06292'], [`T-${selectedTid} I/O`, '#fbc02d'], [`T-${selectedTid} JOIN`, '#ba68c8']].forEach(([lbl, col], i) => {
+          [[`T-${selectedTid} Compute`, '#4caf50'], [`T-${selectedTid} Lock Wait`, '#e53935'], [`T-${selectedTid} Sleep`, '#9e9e9e'], [`T-${selectedTid} Cond Wait`, '#f06292'], [`T-${selectedTid} I/O Wait`, '#fbc02d'], [`T-${selectedTid} Thread Join`, '#ba68c8']].forEach(([lbl, col], i) => {
                svg.append('rect').attr('x', M.left + (i % 3) * 110).attr('y', 4 + Math.floor(i / 3) * 12).attr('width', 8).attr('height', 8).attr('rx', 2).attr('fill', col);
                svg.append('text').attr('x', M.left + (i % 3) * 110 + 12).attr('y', 12 + Math.floor(i / 3) * 12)
                     .attr('fill', 'var(--text-secondary)').attr('font-size', '11px').text(lbl);
@@ -250,7 +250,7 @@ const ProfilerCharts = (() => {
                { title: 'Lock Wait', val: formatUs(blocks['LOCK_WAIT']), color: EventBus.colors['LOCK_WAIT'] },
                { title: 'Cond Wait', val: formatUs(blocks['COND_WAIT']), color: EventBus.colors['COND_WAIT'] },
                { title: 'I/O Wait', val: formatUs(blocks['IO_WAIT']), color: EventBus.colors['IO_WAIT'] },
-               { title: 'Join Wait', val: formatUs(blocks['THREAD_JOIN']), color: EventBus.colors['THREAD_JOIN'] }
+               { title: 'Thread Join', val: formatUs(blocks['THREAD_JOIN']), color: EventBus.colors['THREAD_JOIN'] }
           ];
 
           const totalActive = blocks['COMPUTE'] + blocks['SLEEP'] + blocks['LOCK_WAIT'] + blocks['COND_WAIT'] + blocks['IO_WAIT'] + blocks['THREAD_JOIN'] || 1;
