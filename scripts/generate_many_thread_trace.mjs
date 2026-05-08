@@ -23,8 +23,8 @@ const addrByResource = {
   'log-file': '0xCC003040',
 };
 
-function event(ts, tid, type, resource, duration, scenario, addr = '') {
-  return { ts, tid, event: type, resource, addr, duration_us: duration, scenario };
+function event(ts, tid, type, resource, duration, scenario, addr = '', size = 0) {
+  return { ts, tid, event: type, resource, addr, size, duration_us: duration, scenario };
 }
 
 const events = [];
@@ -41,6 +41,7 @@ for (let i = 0; i < THREADS; i++) {
     const res = resources[(i + c) % resources.length];
     const addr = addrByResource[res];
     const computeDur = 9000 + ((i * 997 + c * 431) % 42000);
+    events.push(event(ts + 150, tid, 'MEM_READ', 'VMEM', 0, 'load_shared_state', addr, 8 + ((i + c) % 4) * 8));
     events.push(event(ts + computeDur, tid, 'COMPUTE', c % 4 === 0 ? 'vector-kernel' : '', computeDur, c % 4 === 0 ? 'compute' : 'pipeline', c % 5 === 0 ? `0x${(0xAA001000 + ((i * 64 + c * 128) % 0x2200)).toString(16).toUpperCase()}` : ''));
     ts += computeDur + 800;
 
@@ -55,6 +56,7 @@ for (let i = 0; i < THREADS; i++) {
     ts += acquireDur + 200;
 
     const criticalDur = 1800 + ((i * 617 + c * 193) % 18000);
+    events.push(event(ts + 75, tid, 'MEM_WRITE', 'VMEM', 0, 'commit_shared_state', addr, 16));
     events.push(event(ts + criticalDur, tid, 'COMPUTE', 'critical-section', criticalDur, 'critical', addr));
     ts += criticalDur + 250;
 
@@ -63,10 +65,12 @@ for (let i = 0; i < THREADS; i++) {
 
     if ((c + i) % 7 === 0) {
       const ioDur = 6000 + ((i * 701 + c * 389) % 65000);
+      events.push(event(ts + 120, tid, 'MEM_WRITE', 'VMEM', 0, 'staging_io_buffer', addrByResource['net-socket'], 64));
       events.push(event(ts + ioDur, tid, 'IO_WAIT', 'net-socket', ioDur, 'io', addrByResource['net-socket']));
       ts += ioDur + 600;
     } else if ((c + i) % 5 === 0) {
       const sleepDur = 4500 + ((i * 421 + c * 277) % 45000);
+      events.push(event(ts + 80, tid, 'MEM_READ', 'VMEM', 0, 'poll_idle_state', addrByResource.work_queue_cv, 8));
       events.push(event(ts + sleepDur, tid, 'SLEEP', '', sleepDur, 'throttle'));
       ts += sleepDur + 600;
     }

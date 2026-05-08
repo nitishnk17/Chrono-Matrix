@@ -8,9 +8,9 @@
     <meta name="description"
         content="Multi-page 2D Visual Analytics System for OS/HPC thread contention — timeline, memory, locks, profiling.">
     <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
-    <script src="sample-trace.js?v=2"></script>
-    <script src="datasets/many-thread-trace.js?v=1"></script>
-    <link rel="stylesheet" href="css/style.css?v=11">
+    <script src="sample-trace.js?v=4"></script>
+    <script src="datasets/many-thread-trace.js?v=3"></script>
+    <link rel="stylesheet" href="css/style.css?v=12">
 </head>
 
 <body>
@@ -161,6 +161,17 @@
                         <line x1="2" y1="16" x2="22" y2="16" />
                     </svg>
                     <span class="nav-label">Memory</span>
+                </a>
+                <a class="nav-item" data-page="atlas" title="Trace Atlas">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="3" y="4" width="8" height="16" rx="2" />
+                        <rect x="13" y="4" width="8" height="16" rx="2" />
+                        <path d="M6 8H8" />
+                        <path d="M6 12H8" />
+                        <path d="M16 8H18" />
+                        <path d="M16 12H18" />
+                    </svg>
+                    <span class="nav-label">Trace Atlas</span>
                 </a>
                 <a class="nav-item" data-page="contention" title="Lock Contention">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -342,12 +353,15 @@
                         <div class="event-filter-row" id="event-type-filters">
                             <label class="ev-chk" data-ev="COMPUTE"><span class="ev-dot" style="background:#4caf50"></span>Compute</label>
                             <label class="ev-chk" data-ev="SLEEP"><span class="ev-dot" style="background:#9e9e9e"></span>Sleep</label>
-                            <label class="ev-chk" data-ev="IO_WAIT"><span class="ev-dot" style="background:#4dd0e1"></span>I/O</label>
+                            <label class="ev-chk" data-ev="IO_WAIT"><span class="ev-dot" style="background:#4dd0e1"></span>I/O Wait</label>
                             <label class="ev-chk" data-ev="COND_WAIT"><span class="ev-dot" style="background:#f06292"></span>Cond Wait</label>
-                            <label class="ev-chk" data-ev="THREAD_JOIN"><span class="ev-dot" style="background:#ba68c8"></span>Join</label>
-                            <label class="ev-chk" data-ev="LOCK_ACQUIRE"><span class="ev-dot" style="background:#ffb74d"></span>Acquire</label>
+                            <label class="ev-chk" data-ev="THREAD_JOIN"><span class="ev-dot" style="background:#ba68c8"></span>Thread Join</label>
+                            <label class="ev-chk" data-ev="LOCK_ACQUIRE"><span class="ev-dot" style="background:#ffb74d"></span>Lock Acquire</label>
                             <label class="ev-chk" data-ev="LOCK_WAIT"><span class="ev-dot" style="background:#e53935"></span>Lock Wait</label>
-                            <label class="ev-chk" data-ev="LOCK_RELEASE"><span class="ev-dot" style="background:#29b6f6"></span>Release</label>
+                            <label class="ev-chk" data-ev="LOCK_WAIT_TIMEOUT"><span class="ev-dot" style="background:#ef4444"></span>Lock Timeout</label>
+                            <label class="ev-chk" data-ev="LOCK_RELEASE"><span class="ev-dot" style="background:#29b6f6"></span>Lock Release</label>
+                            <label class="ev-chk" data-ev="MEM_READ"><span class="ev-dot" style="background:#38bdf8"></span>Memory Read</label>
+                            <label class="ev-chk" data-ev="MEM_WRITE"><span class="ev-dot" style="background:#f97316"></span>Memory Write</label>
                         </div>
                         <span id="gantt-meta" class="panel-meta" style="margin-left:auto;white-space:nowrap;"></span>
                     </div>
@@ -378,6 +392,37 @@
                             <span class="panel-meta">By total lock-wait events</span>
                         </div>
                         <div id="addr-rank-chart"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!-- PAGE: ATLAS                                     -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div class="page" id="page-atlas">
+                <div class="atlas-guide">
+                    <div class="atlas-guide-item"><span class="atlas-guide-dot atlas-guide-dot-time"></span>Left panel shows thread activity over time</div>
+                    <div class="atlas-guide-item"><span class="atlas-guide-dot atlas-guide-dot-space"></span>Right panel shows address hotspots over time</div>
+                    <div class="atlas-guide-item"><span class="atlas-guide-dot atlas-guide-dot-click"></span>Click any bar or cell to focus one thread</div>
+                </div>
+                <div class="atlas-layout">
+                    <div class="panel atlas-time-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <div class="icon">↔</div>TEMPORAL TRACE LANE
+                            </div>
+                            <span id="atlas-time-meta" class="panel-meta"></span>
+                        </div>
+                        <div id="atlas-time-chart"></div>
+                    </div>
+                    <div class="panel atlas-space-panel">
+                        <div class="panel-header">
+                            <div class="panel-title">
+                                <div class="icon">▦</div>SPATIAL ADDRESS MAP
+                            </div>
+                            <span id="atlas-space-meta" class="panel-meta"></span>
+                        </div>
+                        <div id="atlas-space-chart"></div>
                     </div>
                 </div>
             </div>
@@ -536,10 +581,11 @@
                 <div class="viz3d-controls">
                     <div class="viz3d-legend">
                         <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#00e5ff"></span>Compute</div>
-                        <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#10b981"></span>Lock Acquired</div>
+                        <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#10b981"></span>Lock Acquire</div>
                         <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#f59e0b"></span>Lock Wait</div>
+                        <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#ef4444"></span>Lock Timeout</div>
                         <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#e11d48"></span>Deadlock</div>
-                        <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#c084fc"></span>Scenario</div>
+                        <div class="viz3d-legend-item"><span class="viz3d-dot" style="background:#c084fc"></span>Scenario Group</div>
                     </div>
                     <div class="viz3d-btns">
                         <button class="viz3d-btn" id="gx-play-btn">⏸ PAUSE</button>
@@ -579,11 +625,12 @@
             <div class="page page-3d" id="page-flow3d">
                 <!-- Color key bar -->
                 <div class="viz3d-color-key">
-                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#00e5ff"></span>COMPUTE</div>
-                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#10b981"></span>LOCK ACQUIRE</div>
-                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#f59e0b"></span>LOCK WAIT</div>
-                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#64748b"></span>LOCK RELEASE</div>
-                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#e11d48"></span>DEADLOCK</div>
+                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#00e5ff"></span>Compute</div>
+                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#10b981"></span>Lock Acquire</div>
+                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#f59e0b"></span>Lock Wait</div>
+                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#64748b"></span>Lock Release</div>
+                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#ef4444"></span>Lock Timeout</div>
+                    <div class="viz3d-ck-item"><span class="viz3d-dot" style="background:#e11d48"></span>Deadlock</div>
                     <span class="viz3d-ck-dir">← OLDER &nbsp;&nbsp; NEWER →</span>
                 </div>
                 <!-- Flow Controls Bar -->
@@ -645,6 +692,7 @@
     <script src="js/eventbus.js?v=4"></script>
     <script src="js/gantt.js?v=9"></script>
     <script src="js/heatmap.js?v=7"></script>
+    <script src="js/atlas.js?v=1"></script>
     <script src="js/chord.js?v=9"></script>
     <script src="js/stats.js?v=4"></script>
     <script src="js/overview.js?v=16"></script>
@@ -654,7 +702,7 @@
     <script src="js/timeline3d.js?v=6"></script>
     <script src="js/galaxy3d.js?v=7"></script>
     <script src="js/flow3d.js?v=3"></script>
-    <script src="js/main.js?v=10"></script>
+    <script src="js/main.js?v=11"></script>
 
 </body>
 

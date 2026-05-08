@@ -25,6 +25,12 @@ const GalaxyViz = (() => {
         COMPUTE: '#38bdf8',
         LOCK_ACQUIRE: '#34d399',
         LOCK_WAIT: '#f59e0b',
+        LOCK_WAIT_TIMEOUT: '#ef4444',
+        COND_WAIT: '#f472b6',
+        IO_WAIT: '#f59e0b',
+        SLEEP: '#64748b',
+        MEM_READ: '#38bdf8',
+        MEM_WRITE: '#f97316',
         DEADLOCK_DETECTED: '#ef4444'
     };
     let traceData = [], sortedTrace = [], TIDS = [], TS_MIN = 0, TS_SPAN = 1;
@@ -59,6 +65,12 @@ const GalaxyViz = (() => {
         if (event === 'DEADLOCK_DETECTED') return 'DEADLOCK_DETECTED';
         if (event === 'LOCK_WAIT') return 'LOCK_WAIT';
         if (event === 'LOCK_ACQUIRE') return 'LOCK_ACQUIRE';
+        if (event === 'LOCK_WAIT_TIMEOUT') return 'LOCK_WAIT_TIMEOUT';
+        if (event === 'COND_WAIT') return 'COND_WAIT';
+        if (event === 'IO_WAIT') return 'IO_WAIT';
+        if (event === 'SLEEP') return 'SLEEP';
+        if (event === 'MEM_READ') return 'MEM_READ';
+        if (event === 'MEM_WRITE') return 'MEM_WRITE';
         return 'COMPUTE';
     }
 

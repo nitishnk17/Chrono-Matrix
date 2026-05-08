@@ -14,15 +14,15 @@ const LockStats = (() => {
      function buildLockStats(data) {
           const stats = {};
           data.forEach(d => {
-               if (d.event === 'LOCK_WAIT' || d.event === 'LOCK_ACQUIRE' || d.event === 'DEADLOCK_DETECTED' ||
+               if (d.event === 'LOCK_WAIT' || d.event === 'LOCK_WAIT_TIMEOUT' || d.event === 'LOCK_ACQUIRE' || d.event === 'DEADLOCK_DETECTED' ||
                     d.event === 'COND_WAIT' || d.event === 'IO_WAIT' || d.event === 'THREAD_JOIN') {
 
-                    if (!stats[d.resource]) stats[d.resource] = { wait: 0, acquires: 0, deadlocks: 0, threads: new Set() };
+                    if (!stats[d.resource]) stats[d.resource] = { wait: 0, waitEvents: 0, acquires: 0, deadlocks: 0, threads: new Set() };
                     const s = stats[d.resource];
 
-                    if (d.event === 'LOCK_WAIT' || d.event === 'COND_WAIT' || d.event === 'IO_WAIT' || d.event === 'THREAD_JOIN') {
+                    if (d.event === 'LOCK_WAIT' || d.event === 'LOCK_WAIT_TIMEOUT' || d.event === 'COND_WAIT' || d.event === 'IO_WAIT' || d.event === 'THREAD_JOIN') {
                          s.wait += d.duration_us;
-                         s.acquires++;
+                         s.waitEvents++;
                     }
                     if (d.event === 'LOCK_ACQUIRE') s.acquires++;
                     if (d.event === 'DEADLOCK_DETECTED') s.deadlocks++;
@@ -30,7 +30,7 @@ const LockStats = (() => {
                }
           });
           return Object.entries(stats)
-               .map(([res, s]) => ({ resource: res, wait: s.wait, acquires: s.acquires, deadlocks: s.deadlocks, threads: s.threads.size }))
+               .map(([res, s]) => ({ resource: res, wait: s.wait, waitEvents: s.waitEvents, acquires: s.acquires, deadlocks: s.deadlocks, threads: s.threads.size }))
                .sort((a, b) => b.wait - a.wait);
      }
 
@@ -121,7 +121,8 @@ const LockStats = (() => {
                 <tr>
                     <th>Resource</th>
                     <th>Total Wait</th>
-                    <th>Lock Ops</th>
+                    <th>Wait Events</th>
+                    <th>Acquires</th>
                     <th>Threads</th>
                     <th>Deadlocks</th>
                 </tr>
@@ -137,6 +138,7 @@ const LockStats = (() => {
                     ${formatUs(s.wait)}
                     <div class="wait-bar" style="width:${pct}%"></div>
                 </td>
+                <td>${s.waitEvents}</td>
                 <td>${s.acquires}</td>
                 <td>${s.threads}</td>
                 <td style="color:${s.deadlocks > 0 ? 'var(--purple)' : 'var(--text-muted)'}">${s.deadlocks || '—'}</td>

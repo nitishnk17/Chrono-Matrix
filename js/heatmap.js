@@ -15,7 +15,10 @@ const HeatmapChart = (() => {
      const ADDR_BINS = 24;
      const MARGIN = { top: 10, right: 20, bottom: 85, left: 90 };
 
-     const CONTENTION = new Set(['LOCK_WAIT', 'DEADLOCK_DETECTED', 'LOCK_ACQUIRE']);
+     const TRACKED_EVENTS = new Set([
+          'LOCK_WAIT', 'DEADLOCK_DETECTED', 'LOCK_ACQUIRE',
+          'MEM_READ', 'MEM_WRITE', 'MEM_ALLOC', 'MEM_FREE'
+     ]);
 
      let allData = [], filteredData = [];
      let tooltip;
@@ -23,7 +26,7 @@ const HeatmapChart = (() => {
 
      // Persistent canvas refs (recreated only on scenario change, not on timeRange)
      let canvas, ctx, dpr, innerW, innerH, cellW, cellH;
-     let matrix = null, waitMatrix = null;
+     let matrix = null, waitMatrix = null, sizeMatrix = null;
      let tMin, tMax;
 
      function formatUs(v) {
@@ -42,7 +45,7 @@ const HeatmapChart = (() => {
 
      function addrLabel(i) {
           const v = 0xAA001000 + Math.floor(i * (0xCC003080 - 0xAA001000) / ADDR_BINS);
-          return '0x' + v.toString(16).toUpperCase().slice(-6);
+          return '0x' + v.toString(16).toUpperCase().padStart(8, '0');
      }
 
      // Build full matrix from data (expensive, only on scenario change)
@@ -53,18 +56,21 @@ const HeatmapChart = (() => {
 
           const mat = Array.from({ length: ADDR_BINS }, () => new Int32Array(TIME_BINS));
           const wMat = Array.from({ length: ADDR_BINS }, () => new Float64Array(TIME_BINS));
+          const sMat = Array.from({ length: ADDR_BINS }, () => new Float64Array(TIME_BINS));
 
           data.forEach(d => {
-               if (!CONTENTION.has(d.event)) return;
+               if (!TRACKED_EVENTS.has(d.event)) return;
                const ab = addrBucket(d.addr);
                if (ab === null) return;
                const tb = Math.min(TIME_BINS - 1, Math.floor(((d.ts - tMin) / tRange) * TIME_BINS));
                mat[ab][tb]++;
                if (d.event === 'LOCK_WAIT' || d.event === 'DEADLOCK_DETECTED')
                     wMat[ab][tb] += d.duration_us;
+               if (d.event === 'MEM_READ' || d.event === 'MEM_WRITE' || d.event === 'MEM_ALLOC' || d.event === 'MEM_FREE')
+                    sMat[ab][tb] += Math.max(0, Number(d.size) || 0);
           });
 
-          return { mat, wMat };
+          return { mat, wMat, sMat };
      }
 
      // Build partial matrix for a time window (fast, for timeRange updates)
@@ -102,6 +108,7 @@ const HeatmapChart = (() => {
           const built = buildMatrix(data.length ? data : filteredData);
           matrix = built.mat;
           waitMatrix = built.wMat;
+          sizeMatrix = built.sMat;
 
           // ── Wrapper ───────────────────────────────────────────
           const wrap = document.createElement('div');
@@ -168,14 +175,18 @@ const HeatmapChart = (() => {
                const ai = Math.max(0, Math.min(ADDR_BINS - 1, Math.floor(my / cellH)));
                const val = matrix[ai][ti];
                if (!val) { tooltip.classList.remove('visible'); return; }
-               const tBin = tMin + (ti / TIME_BINS) * (tMax - tMin);
+               const tStart = tMin + (ti / TIME_BINS) * (tMax - tMin);
+               const tEnd = tMin + ((ti + 1) / TIME_BINS) * (tMax - tMin);
+               const waitVal = waitMatrix?.[ai]?.[ti] || 0;
+               const sizeVal = sizeMatrix?.[ai]?.[ti] || 0;
                tooltip.classList.add('visible');
                tooltip.innerHTML = `
                 <div class="tt-title">CONTENTION CELL</div>
-                <div class="tt-row"><span class="tt-key">Addr</span><span class="tt-val">${addrLabel(ai)}</span></div>
-                <div class="tt-row"><span class="tt-key">Time</span><span class="tt-val">${formatUs(tBin)}</span></div>
+                <div class="tt-row"><span class="tt-key">Addr bin</span><span class="tt-val">${addrLabel(ai)} - ${addrLabel(Math.min(ADDR_BINS - 1, ai + 1))}</span></div>
+                <div class="tt-row"><span class="tt-key">Time window</span><span class="tt-val">${formatUs(tStart - tMin)} - ${formatUs(tEnd - tMin)}</span></div>
                 <div class="tt-row"><span class="tt-key">Events</span><span class="tt-val">${val}</span></div>
-                <div class="tt-row"><span class="tt-key">Wait</span><span class="tt-val">${formatUs(waitMatrix[ai][ti])}</span></div>
+                ${waitVal > 0 ? `<div class="tt-row"><span class="tt-key">Wait</span><span class="tt-val">${formatUs(waitVal)}</span></div>` : ''}
+                ${sizeVal > 0 ? `<div class="tt-row"><span class="tt-key">Bytes</span><span class="tt-val">${sizeVal.toLocaleString()}</span></div>` : ''}
             `;
                tooltip.style.left = Math.min(e.clientX + 14, window.innerWidth - 280) + 'px';
                tooltip.style.top = Math.max(e.clientY - 10, 10) + 'px';
@@ -223,6 +234,7 @@ const HeatmapChart = (() => {
                const built = buildMatrix(data.length ? data : filteredData);
                matrix = built.mat;
                waitMatrix = built.wMat;
+               sizeMatrix = built.sMat;
                scheduleRedraw();
                updateHeatmapMeta();
                debounceTimer = null;
@@ -232,7 +244,7 @@ const HeatmapChart = (() => {
      function updateHeatmapMeta() {
           const total = matrix ? matrix.reduce((s, r) => s + r.reduce((a, b) => a + b, 0), 0) : 0;
           document.getElementById('heatmap-meta').textContent =
-               `${total.toLocaleString()} contention events · ${TIME_BINS}×${ADDR_BINS} grid`;
+               `${total.toLocaleString()} tracked events · ${TIME_BINS}×${ADDR_BINS} grid`;
      }
 
      // ── Address Ranking Chart (Memory page sidebar) ───────

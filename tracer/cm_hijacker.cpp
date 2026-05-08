@@ -14,6 +14,7 @@
 #include <string.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <inttypes.h>
 
 // Function pointers for OS-level sleep functions
 typedef int (*nanosleep_t)(const struct timespec *req, struct timespec *rem);
@@ -27,6 +28,8 @@ static usleep_t real_usleep = NULL;
 
 // Function pointers to the real OS-level mutex functions
 typedef int (*pthread_mutex_lock_t)(pthread_mutex_t *);
+typedef int (*pthread_mutex_timedlock_t)(pthread_mutex_t *, const struct timespec *);
+typedef int (*pthread_mutex_trylock_t)(pthread_mutex_t *);
 typedef int (*pthread_mutex_unlock_t)(pthread_mutex_t *);
 
 typedef int (*pthread_create_t)(pthread_t *, const pthread_attr_t *, void *(*)(void *), void *);
@@ -40,6 +43,8 @@ typedef ssize_t (*recv_t)(int, void *, size_t, int);
 typedef ssize_t (*send_t)(int, const void *, size_t, int);
 
 static pthread_mutex_lock_t real_lock = NULL;
+static pthread_mutex_timedlock_t real_timedlock = NULL;
+static pthread_mutex_trylock_t real_trylock = NULL;
 static pthread_mutex_unlock_t real_unlock = NULL;
 
 static pthread_create_t real_create = NULL;
@@ -57,8 +62,18 @@ static uint64_t start_time_us = 0;
 
 // Thread-local flags to prevent recursion and track hold times
 __thread int in_tracer = 0;
-__thread uint64_t hold_start_time = 0;
 __thread int my_tid = 0;
+
+static const size_t JSON_BUF_SIZE = 2048;
+static const size_t MUTEX_STACK_DEPTH = 32;
+
+struct MutexHoldFrame {
+    void* mutex;
+    uint64_t start_ts;
+};
+
+__thread MutexHoldFrame held_mutexes[MUTEX_STACK_DEPTH];
+__thread size_t held_mutex_depth = 0;
 
 // GLOBAL Lock-Free Ring Buffer
 #define BUFFER_SIZE 2000000 // 2 Million Events
@@ -69,6 +84,7 @@ struct TraceEvent {
     void* addr;         // Mutex Address (Resource)
     void* caller_addr;  // Function Address (Scenario)
     uint64_t duration_us;
+    uint64_t size;
 };
 
 static TraceEvent global_events[BUFFER_SIZE];
@@ -80,6 +96,98 @@ static std::atomic<bool> is_shutting_down{false};
 
 static void flush_buffer(bool is_exit = false);
 static void* background_flusher(void*);
+
+static void format_pointer_value(const void* ptr, char* out, size_t out_size) {
+    if (!out || out_size == 0) return;
+    if (!ptr) {
+        snprintf(out, out_size, "0x0");
+        return;
+    }
+    snprintf(out, out_size, "0x%" PRIXPTR, (uintptr_t)ptr);
+}
+
+static void format_resource_value(const char* prefix, const void* ptr, char* out, size_t out_size) {
+    char ptr_buf[32];
+    format_pointer_value(ptr, ptr_buf, sizeof(ptr_buf));
+    snprintf(out, out_size, "%s%s", prefix ? prefix : "", ptr_buf);
+}
+
+static void sanitize_filename_part(const char* src, char* dst, size_t dst_size) {
+    if (!dst || dst_size == 0) return;
+    if (!src || !*src) {
+        snprintf(dst, dst_size, "trace");
+        return;
+    }
+
+    size_t w = 0;
+    for (const unsigned char* p = (const unsigned char*)src; *p && w + 1 < dst_size; ++p) {
+        char c = (char)*p;
+        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_' || c == '-') {
+            dst[w++] = c;
+        } else {
+            dst[w++] = '_';
+        }
+    }
+    dst[w] = '\0';
+    if (w == 0) {
+        snprintf(dst, dst_size, "trace");
+    }
+}
+
+static void get_program_name(char* out, size_t out_size) {
+    if (!out || out_size == 0) return;
+    char exe_path[512];
+    ssize_t len = readlink("/proc/self/exe", exe_path, sizeof(exe_path) - 1);
+    if (len <= 0) {
+        snprintf(out, out_size, "trace");
+        return;
+    }
+    exe_path[len] = '\0';
+
+    const char* base = strrchr(exe_path, '/');
+    base = base ? base + 1 : exe_path;
+
+    char name_buf[256];
+    sanitize_filename_part(base, name_buf, sizeof(name_buf));
+    snprintf(out, out_size, "%s", name_buf);
+}
+
+static void json_escape_string(const char* src, char* dst, size_t dst_size) {
+    if (!dst || dst_size == 0) return;
+    size_t w = 0;
+    if (!src) {
+        dst[0] = '\0';
+        return;
+    }
+
+    for (const unsigned char* p = (const unsigned char*)src; *p && w + 1 < dst_size; ++p) {
+        const char* rep = NULL;
+        char tmp[7];
+        switch (*p) {
+            case '\\': rep = "\\\\"; break;
+            case '"':  rep = "\\\""; break;
+            case '\n': rep = "\\n"; break;
+            case '\r': rep = "\\r"; break;
+            case '\t': rep = "\\t"; break;
+            default:
+                if (*p < 0x20) {
+                    snprintf(tmp, sizeof(tmp), "\\u%04x", *p);
+                    rep = tmp;
+                }
+                break;
+        }
+
+        if (rep) {
+            size_t len = strlen(rep);
+            if (w + len >= dst_size) break;
+            memcpy(dst + w, rep, len);
+            w += len;
+        } else {
+            dst[w++] = (char)*p;
+        }
+    }
+    dst[w] = '\0';
+}
 
 // The custom Ctrl+C catcher
 static void sigint_handler(int signum) {
@@ -103,6 +211,8 @@ static void initialize() {
     
     if (init_state.compare_exchange_strong(expected, 1)) { // Only 1 thread can ever enter this block
         real_lock = (pthread_mutex_lock_t)dlsym(RTLD_NEXT, "pthread_mutex_lock");
+        real_timedlock = (pthread_mutex_timedlock_t)dlsym(RTLD_NEXT, "pthread_mutex_timedlock");
+        real_trylock = (pthread_mutex_trylock_t)dlsym(RTLD_NEXT, "pthread_mutex_trylock");
         real_unlock = (pthread_mutex_unlock_t)dlsym(RTLD_NEXT, "pthread_mutex_unlock");
         
         real_nanosleep = (nanosleep_t)dlsym(RTLD_NEXT, "nanosleep");
@@ -126,8 +236,10 @@ static void initialize() {
         start_time_us = get_time_us();
         
         // Open Output File
-        char filename[256];
-        snprintf(filename, sizeof(filename), "hijack_trace_%d.json", getpid());
+        char program_name[256];
+        char filename[320];
+        get_program_name(program_name, sizeof(program_name));
+        snprintf(filename, sizeof(filename), "%s.json", program_name);
         fd_out = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd_out >= 0) {
             real_write(fd_out, "[\n", 2);
@@ -163,51 +275,65 @@ static ThreadWaitState active_waits[256];
 
 // Format and write an event directly to the open JSON file descriptor
 static void write_event_to_disk(const TraceEvent& e, bool is_first) {
-    char buf[512];
-    
-    const char* res_prefix = "Mutex_";
-    const char* scen_prefix = "Func_";
-    const void* res_val = e.addr;
-    const void* scen_val = e.caller_addr;
-    
-    if (strcmp(e.event_name, "COMPUTE") == 0) {
-        res_prefix = ""; res_val = (void*)"CPU";
-        scen_prefix = ""; scen_val = e.caller_addr; // Caller addr holds the scenario string
-        
-        int len = snprintf(buf, sizeof(buf),
-            "%s\n  {\n    \"ts\": %lu,\n    \"tid\": %d,\n    \"event\": \"%s\",\n    \"resource\": \"%s\",\n    \"scenario\": \"%s\",\n    \"addr\": \"%p\",\n    \"duration_us\": %lu\n  }",
-            is_first ? "" : ",", e.ts, e.tid, e.event_name, (const char*)res_val, (const char*)scen_val, e.addr, e.duration_us);
-        if (len > 0) real_write(fd_out, buf, len);
-        return;
-    } else if (strcmp(e.event_name, "SLEEP") == 0) {
-        res_prefix = ""; res_val = (void*)"OS_Scheduler";
-        scen_prefix = "Thread_Yield_";
-    } else if (strncmp(e.event_name, "THREAD_", 7) == 0) {
-        res_prefix = ""; res_val = (void*)"Thread_Lifecycle";
-        scen_prefix = "Lifecycle_";
-    } else if (strcmp(e.event_name, "COND_WAIT") == 0) {
-        res_prefix = "CondVar_";
-    } else if (strcmp(e.event_name, "IO_WAIT") == 0) {
-        res_prefix = "FD_";
-        scen_prefix = "IO_";
-    }
-    
-    int len = 0;
-    
-    // Explicitly handle string literals vs pointers
-    if (strcmp(e.event_name, "COMPUTE") == 0 || strcmp(e.event_name, "SLEEP") == 0 || strncmp(e.event_name, "THREAD_", 7) == 0) {
-        len = snprintf(buf, sizeof(buf),
-            "%s\n  {\n    \"ts\": %lu,\n    \"tid\": %d,\n    \"event\": \"%s\",\n    \"resource\": \"%s%s\",\n    \"scenario\": \"%s%p\",\n    \"addr\": \"%p\",\n    \"duration_us\": %lu\n  }",
-            is_first ? "" : ",", e.ts, e.tid, e.event_name, res_prefix, (const char*)res_val, scen_prefix, scen_val, e.addr, e.duration_us);
+    char buf[JSON_BUF_SIZE];
+    char resource_raw[128];
+    char scenario_raw[160];
+    char resource_buf[192];
+    char scenario_buf[224];
+    char addr_buf[32];
+    char ptr_buf[32];
+
+    const bool is_compute = strcmp(e.event_name, "COMPUTE") == 0;
+    const bool is_sleep = strcmp(e.event_name, "SLEEP") == 0;
+    const bool is_thread = strncmp(e.event_name, "THREAD_", 7) == 0;
+    const bool is_mem = strncmp(e.event_name, "MEM_", 4) == 0;
+    const bool is_deadlock = strcmp(e.event_name, "DEADLOCK_DETECTED") == 0;
+
+    if (is_compute) {
+        snprintf(resource_raw, sizeof(resource_raw), "CPU");
+        json_escape_string((const char*)e.caller_addr, scenario_raw, sizeof(scenario_raw));
+    } else if (is_mem) {
+        snprintf(resource_raw, sizeof(resource_raw), "VMEM");
+        json_escape_string((const char*)e.caller_addr, scenario_raw, sizeof(scenario_raw));
+    } else if (is_deadlock) {
+        format_resource_value("Mutex_", e.addr, resource_raw, sizeof(resource_raw));
+        json_escape_string((const char*)e.caller_addr, scenario_raw, sizeof(scenario_raw));
     } else {
-        len = snprintf(buf, sizeof(buf),
-            "%s\n  {\n    \"ts\": %lu,\n    \"tid\": %d,\n    \"event\": \"%s\",\n    \"resource\": \"%s%p\",\n    \"scenario\": \"%s%p\",\n    \"addr\": \"%p\",\n    \"duration_us\": %lu\n  }",
-            is_first ? "" : ",", e.ts, e.tid, e.event_name, res_prefix, res_val, scen_prefix, scen_val, e.addr, e.duration_us);
+        if (is_sleep) {
+            snprintf(resource_raw, sizeof(resource_raw), "OS_Scheduler");
+            format_pointer_value(e.caller_addr, ptr_buf, sizeof(ptr_buf));
+            snprintf(scenario_raw, sizeof(scenario_raw), "Thread_Yield_%s", ptr_buf);
+        } else if (is_thread) {
+            snprintf(resource_raw, sizeof(resource_raw), "Thread_Lifecycle");
+            format_pointer_value(e.caller_addr, ptr_buf, sizeof(ptr_buf));
+            snprintf(scenario_raw, sizeof(scenario_raw), "Lifecycle_%s", ptr_buf);
+        } else if (strcmp(e.event_name, "LOCK_WAIT_TIMEOUT") == 0) {
+            format_resource_value("Mutex_", e.addr, resource_raw, sizeof(resource_raw));
+            format_pointer_value(e.caller_addr, ptr_buf, sizeof(ptr_buf));
+            snprintf(scenario_raw, sizeof(scenario_raw), "TimedWait_%s", ptr_buf);
+        } else if (strcmp(e.event_name, "IO_WAIT") == 0) {
+            snprintf(resource_raw, sizeof(resource_raw), "FD_%d", (int)(uintptr_t)e.addr);
+            format_pointer_value(e.caller_addr, ptr_buf, sizeof(ptr_buf));
+            snprintf(scenario_raw, sizeof(scenario_raw), "IO_%s", ptr_buf);
+        } else if (strcmp(e.event_name, "COND_WAIT") == 0) {
+            format_resource_value("CondVar_", e.addr, resource_raw, sizeof(resource_raw));
+            format_pointer_value(e.caller_addr, ptr_buf, sizeof(ptr_buf));
+            snprintf(scenario_raw, sizeof(scenario_raw), "Func_%s", ptr_buf);
+        } else {
+            format_resource_value("Mutex_", e.addr, resource_raw, sizeof(resource_raw));
+            format_pointer_value(e.caller_addr, ptr_buf, sizeof(ptr_buf));
+            snprintf(scenario_raw, sizeof(scenario_raw), "Func_%s", ptr_buf);
+        }
     }
-    
-    if (len > 0) {
-        real_write(fd_out, buf, len);
-    }
+
+    json_escape_string(resource_raw, resource_buf, sizeof(resource_buf));
+    json_escape_string(scenario_raw, scenario_buf, sizeof(scenario_buf));
+    format_pointer_value(e.addr, addr_buf, sizeof(addr_buf));
+    snprintf(buf, sizeof(buf),
+        "%s\n  {\n    \"ts\": %" PRIu64 ",\n    \"tid\": %d,\n    \"event\": \"%s\",\n    \"resource\": \"%s\",\n    \"scenario\": \"%s\",\n    \"addr\": \"%s\",\n    \"size\": %" PRIu64 ",\n    \"duration_us\": %" PRIu64 "\n  }",
+        is_first ? "" : ",", e.ts, e.tid, e.event_name, resource_buf, scenario_buf, addr_buf, e.size, e.duration_us);
+
+    real_write(fd_out, buf, strlen(buf));
 }
 
 static void flush_buffer(bool is_exit) {
@@ -248,7 +374,7 @@ static void* background_flusher(void*) {
     return NULL;
 }
 
-void record_event(const char* name, void* addr, void* caller, uint64_t duration) {
+void record_event(const char* name, void* addr, void* caller, uint64_t duration, uint64_t size) {
     // Atomically claim the next slot in the ring buffer
     uint64_t idx = write_head.fetch_add(1, std::memory_order_relaxed);
     
@@ -268,6 +394,18 @@ void record_event(const char* name, void* addr, void* caller, uint64_t duration)
     global_events[ring_idx].addr = addr;
     global_events[ring_idx].caller_addr = caller; 
     global_events[ring_idx].duration_us = duration;
+    global_events[ring_idx].size = size;
+}
+
+extern "C" void cm_record_lock_wait(const void* resource, uint64_t duration_us, const char* event_name, const char* scenario) {
+    if (!initialized) initialize();
+    if (in_tracer) return;
+
+    in_tracer = 1;
+    const char* name = event_name ? event_name : "LOCK_WAIT";
+    const char* note = scenario ? scenario : "unknown";
+    record_event(name, (void*)resource, (void*)note, duration_us, 0);
+    in_tracer = 0;
 }
 
 // Ensure trace is flushed successfully when the process gracefully exits
@@ -314,10 +452,78 @@ extern "C" int pthread_mutex_lock(pthread_mutex_t *mutex) {
     if (wait_idx != -1) {
         active_waits[wait_idx].tid = 0;
     }
+
+    record_event(wait_time > 20 ? "LOCK_WAIT" : "LOCK_ACQUIRE", (void*)mutex, caller, wait_time, 0);
+    if (result == 0) {
+        if (held_mutex_depth < MUTEX_STACK_DEPTH) {
+            held_mutexes[held_mutex_depth++] = { (void*)mutex, t1 };
+        } else if (held_mutex_depth > 0) {
+            held_mutexes[MUTEX_STACK_DEPTH - 1] = { (void*)mutex, t1 };
+        }
+    }
     
-    record_event(wait_time > 20 ? "LOCK_WAIT" : "LOCK_ACQUIRE", (void*)mutex, caller, wait_time);
-    hold_start_time = t1; 
-    
+    in_tracer = 0;
+    return result;
+}
+
+extern "C" int pthread_mutex_timedlock(pthread_mutex_t *mutex, const struct timespec *abstime) {
+    if (!initialized) initialize();
+    if (in_tracer) {
+        if (real_timedlock) return real_timedlock(mutex, abstime);
+        return real_lock ? real_lock(mutex) : 0;
+    }
+
+    in_tracer = 1;
+    uint64_t t0 = get_time_us();
+    void* caller = __builtin_return_address(0);
+
+    int result = real_timedlock ? real_timedlock(mutex, abstime) : (real_lock ? real_lock(mutex) : 0);
+
+    uint64_t t1 = get_time_us();
+    uint64_t wait_time = t1 - t0;
+
+    if (result == 0) {
+        record_event(wait_time > 20 ? "LOCK_WAIT" : "LOCK_ACQUIRE", (void*)mutex, caller, wait_time, 0);
+        if (held_mutex_depth < MUTEX_STACK_DEPTH) {
+            held_mutexes[held_mutex_depth++] = { (void*)mutex, t1 };
+        } else if (held_mutex_depth > 0) {
+            held_mutexes[MUTEX_STACK_DEPTH - 1] = { (void*)mutex, t1 };
+        }
+    } else {
+        record_event("LOCK_WAIT_TIMEOUT", (void*)mutex, caller, wait_time, 0);
+    }
+
+    in_tracer = 0;
+    return result;
+}
+
+extern "C" int pthread_mutex_trylock(pthread_mutex_t *mutex) {
+    if (!initialized) initialize();
+    if (in_tracer) {
+        if (real_trylock) return real_trylock(mutex);
+        return real_lock ? real_lock(mutex) : 0;
+    }
+
+    in_tracer = 1;
+    uint64_t t0 = get_time_us();
+    void* caller = __builtin_return_address(0);
+
+    int result = real_trylock ? real_trylock(mutex) : (real_lock ? real_lock(mutex) : 0);
+
+    uint64_t t1 = get_time_us();
+    uint64_t wait_time = t1 - t0;
+
+    if (result == 0) {
+        record_event(wait_time > 20 ? "LOCK_WAIT" : "LOCK_ACQUIRE", (void*)mutex, caller, wait_time, 0);
+        if (held_mutex_depth < MUTEX_STACK_DEPTH) {
+            held_mutexes[held_mutex_depth++] = { (void*)mutex, t1 };
+        } else if (held_mutex_depth > 0) {
+            held_mutexes[MUTEX_STACK_DEPTH - 1] = { (void*)mutex, t1 };
+        }
+    } else {
+        record_event("LOCK_WAIT_TIMEOUT", (void*)mutex, caller, wait_time, 0);
+    }
+
     in_tracer = 0;
     return result;
 }
@@ -328,11 +534,28 @@ extern "C" int pthread_mutex_unlock(pthread_mutex_t *mutex) {
 
     in_tracer = 1;
     uint64_t t0 = get_time_us();
-    uint64_t hold_time = t0 - hold_start_time;
+    uint64_t hold_time = 0;
+    size_t match_idx = (size_t)-1;
+
+    for (size_t i = held_mutex_depth; i > 0; --i) {
+        size_t idx = i - 1;
+        if (held_mutexes[idx].mutex == (void*)mutex) {
+            match_idx = idx;
+            hold_time = t0 - held_mutexes[idx].start_ts;
+            break;
+        }
+    }
+
+    if (match_idx != (size_t)-1) {
+        held_mutexes[match_idx] = held_mutexes[held_mutex_depth - 1];
+        if (held_mutex_depth > 0) {
+            --held_mutex_depth;
+        }
+    }
     
     void* caller = __builtin_return_address(0);
     
-    record_event("LOCK_RELEASE", (void*)mutex, caller, hold_time);
+    record_event("LOCK_RELEASE", (void*)mutex, caller, hold_time, 0);
     int result = real_unlock(mutex);
     
     in_tracer = 0;
@@ -354,11 +577,11 @@ static void* cm_thread_wrapper(void* ptr) {
     free(args);
 
     my_tid = syscall(SYS_gettid);
-    record_event("THREAD_START", (void*)0x0, caller, 1);
+    record_event("THREAD_START", (void*)0x0, caller, 1, 0);
     
     void* result = routine(arg);
     
-    record_event("THREAD_END", (void*)0x0, caller, 1);
+    record_event("THREAD_END", (void*)0x0, caller, 1, 0);
     return result;
 }
 
@@ -389,7 +612,7 @@ extern "C" int pthread_join(pthread_t thread, void **retval) {
     int result = real_join(thread, retval);
     
     uint64_t t1 = get_time_us();
-    record_event("THREAD_JOIN", (void*)thread, caller, t1 - t0);
+    record_event("THREAD_JOIN", (void*)thread, caller, t1 - t0, 0);
     
     in_tracer = 0;
     return result;
@@ -407,7 +630,9 @@ extern "C" int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex) {
     int result = real_cond_wait(cond, mutex);
     
     uint64_t t1 = get_time_us();
-    record_event("COND_WAIT", (void*)cond, caller, t1 - t0);
+    // Model the wait against the associated mutex so dependency analysis can
+    // link the blocked consumer to the thread currently holding the resource.
+    record_event("COND_WAIT", (void*)mutex, caller, t1 - t0, 0);
     
     in_tracer = 0;
     return result;
@@ -424,7 +649,7 @@ extern "C" int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mut
     int result = real_cond_timedwait(cond, mutex, abstime);
     
     uint64_t t1 = get_time_us();
-    record_event("COND_WAIT", (void*)cond, caller, t1 - t0);
+    record_event("COND_WAIT", (void*)mutex, caller, t1 - t0, 0);
     
     in_tracer = 0;
     return result;
@@ -444,7 +669,7 @@ extern "C" ssize_t read(int fd, void *buf, size_t count) {
     uint64_t t1 = get_time_us();
     uint64_t duration = t1 - t0;
     if (duration > 50) {
-        record_event("IO_WAIT", (void*)(uintptr_t)fd, caller, duration);
+        record_event("IO_WAIT", (void*)(uintptr_t)fd, caller, duration, (uint64_t)count);
     }
     
     in_tracer = 0;
@@ -464,7 +689,7 @@ extern "C" ssize_t write(int fd, const void *buf, size_t count) {
     uint64_t t1 = get_time_us();
     uint64_t duration = t1 - t0;
     if (duration > 50) {
-        record_event("IO_WAIT", (void*)(uintptr_t)fd, caller, duration);
+        record_event("IO_WAIT", (void*)(uintptr_t)fd, caller, duration, (uint64_t)count);
     }
     
     in_tracer = 0;
@@ -482,7 +707,7 @@ extern "C" ssize_t recv(int sockfd, void *buf, size_t len, int flags) {
     ssize_t result = real_recv(sockfd, buf, len, flags);
     
     uint64_t t1 = get_time_us();
-    record_event("IO_WAIT", (void*)(uintptr_t)sockfd, caller, t1 - t0);
+    record_event("IO_WAIT", (void*)(uintptr_t)sockfd, caller, t1 - t0, (uint64_t)len);
     
     in_tracer = 0;
     return result;
@@ -499,7 +724,7 @@ extern "C" ssize_t send(int sockfd, const void *buf, size_t len, int flags) {
     ssize_t result = real_send(sockfd, buf, len, flags);
     
     uint64_t t1 = get_time_us();
-    record_event("IO_WAIT", (void*)(uintptr_t)sockfd, caller, t1 - t0);
+    record_event("IO_WAIT", (void*)(uintptr_t)sockfd, caller, t1 - t0, (uint64_t)len);
     
     in_tracer = 0;
     return result;
@@ -518,7 +743,7 @@ extern "C" int nanosleep(const struct timespec *req, struct timespec *rem) {
     int result = real_nanosleep(req, rem); // Actual sleep happens here
     
     uint64_t t1 = get_time_us();
-    record_event("SLEEP", (void*)0x0, caller, t1 - t0);
+    record_event("SLEEP", (void*)0x0, caller, t1 - t0, 0);
     
     in_tracer = 0;
     return result;
@@ -535,7 +760,7 @@ extern "C" int clock_nanosleep(clockid_t clockid, int flags, const struct timesp
     int result = real_clock_nanosleep(clockid, flags, req, rem);
     
     uint64_t t1 = get_time_us();
-    record_event("SLEEP", (void*)0x0, caller, t1 - t0);
+    record_event("SLEEP", (void*)0x0, caller, t1 - t0, 0);
     
     in_tracer = 0;
     return result;
@@ -552,7 +777,7 @@ extern "C" int usleep(useconds_t usec) {
     int result = real_usleep(usec);
     
     uint64_t t1 = get_time_us();
-    record_event("SLEEP", (void*)0x0, caller, t1 - t0);
+    record_event("SLEEP", (void*)0x0, caller, t1 - t0, 0);
     
     in_tracer = 0;
     return result;
@@ -564,7 +789,25 @@ extern "C" void cm_record_compute(const char* scenario, uint64_t duration_us) {
     if (!initialized) initialize();
     
     // We pass the string pointer as the caller_addr so write_trace can read it
-    record_event("COMPUTE", (void*)0x0, (void*)scenario, duration_us); 
+    record_event("COMPUTE", (void*)0x0, (void*)scenario, duration_us, 0); 
+}
+
+extern "C" void cm_record_mem_access(const void* addr, size_t size, const char* kind, const char* scenario) {
+    if (!initialized) initialize();
+    if (!kind) return;
+
+    const char* event_name = kind;
+    if (strcmp(kind, "MEM_ALLOC") == 0 || strcmp(kind, "MEM_FREE") == 0 ||
+        strcmp(kind, "MEM_READ") == 0 || strcmp(kind, "MEM_WRITE") == 0) {
+        event_name = kind;
+    }
+
+    record_event(event_name, (void*)addr, (void*)scenario, 0, (uint64_t)size);
+}
+
+extern "C" void cm_record_deadlock(const void* resource, const char* scenario) {
+    if (!initialized) initialize();
+    record_event("DEADLOCK_DETECTED", (void*)resource, (void*)scenario, 0, 0);
 }
 
 // --- THE EXPORTER ---
