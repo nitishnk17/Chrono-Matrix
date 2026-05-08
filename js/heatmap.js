@@ -146,25 +146,25 @@ const HeatmapChart = (() => {
                .call(d3.axisLeft(yScl).ticks(6).tickFormat(i => addrLabel(Math.round(i))));
 
           g.append('text').attr('x', innerW / 2).attr('y', innerH + 42)
-               .attr('text-anchor', 'middle').attr('fill', '#7aa0c4').attr('font-size', '12px')
+               .attr('text-anchor', 'middle').attr('fill', '#cbd5e1').attr('font-size', '12px')
                .text('TIME →');
 
           g.append('text').attr('transform', 'rotate(-90)')
                .attr('x', -innerH / 2).attr('y', -78)
-               .attr('text-anchor', 'middle').attr('fill', '#7aa0c4').attr('font-size', '12px')
+               .attr('text-anchor', 'middle').attr('fill', '#cbd5e1').attr('font-size', '12px')
                .text('ADDR (hex)');
 
           // Colour gradient legend
           const defs = svg.append('defs');
           const grd = defs.append('linearGradient').attr('id', 'hm-grad').attr('x1', '0%').attr('x2', '100%');
           grd.append('stop').attr('offset', '0%').attr('stop-color', '#0d1b33');
-          grd.append('stop').attr('offset', '100%').attr('stop-color', '#e53935');
+          grd.append('stop').attr('offset', '100%').attr('stop-color', EventBus.colors.LOCK_WAIT);
           const legG = g.append('g').attr('transform', `translate(${innerW - 140},${innerH + 58})`);
           legG.append('rect').attr('width', 140).attr('height', 8).attr('fill', 'url(#hm-grad)');
-          legG.append('text').attr('y', -3).attr('fill', '#7aa0c4').attr('font-size', '11px').text('0');
+          legG.append('text').attr('y', -3).attr('fill', '#cbd5e1').attr('font-size', '11px').text('0');
           const maxVal = d3.max(matrix.flatMap(r => [...r])) || 1;
           legG.append('text').attr('x', 140).attr('y', -3).attr('text-anchor', 'end')
-               .attr('fill', '#7aa0c4').attr('font-size', '11px').text(maxVal + ' events');
+               .attr('fill', '#cbd5e1').attr('font-size', '11px').text(maxVal + ' events');
 
           // ── Mouse tooltip ─────────────────────────────────────
           canvas.addEventListener('mousemove', (e) => {
@@ -210,7 +210,7 @@ const HeatmapChart = (() => {
                     if (!val) continue;
                     const t = val / maxVal;
                     // Custom color: dark blue → cyan → red
-                    ctx.fillStyle = d3.interpolateRgb('#0d1b33', '#e53935')(t);
+                    ctx.fillStyle = d3.interpolateRgb('#0d1b33', EventBus.colors.LOCK_WAIT)(t);
                     ctx.fillRect(ti * cellW, ai * cellH, Math.max(cellW - 0.5, 1), Math.max(cellH - 0.5, 1));
                }
           }
@@ -275,7 +275,7 @@ const HeatmapChart = (() => {
                .style('height', '100%');
           const g = svg.append('g').attr('transform', `translate(${M.left},${M.top})`);
 
-          const colorScale = d3.scaleSequential().domain([0, addrTotals[0].total]).interpolator(d3.interpolateRgb('#0d3355', '#e53935'));
+          const colorScale = d3.scaleSequential().domain([0, addrTotals[0].total]).interpolator(d3.interpolateRgb('#0d3355', EventBus.colors.LOCK_WAIT));
 
           g.selectAll('.ar-bar').data(addrTotals).join('rect').attr('class', 'ar-bar')
                .attr('y', d => yScl(d.addr)).attr('height', yScl.bandwidth()).attr('rx', 3)

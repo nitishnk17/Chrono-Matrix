@@ -19,15 +19,15 @@
 
     --border-glass: rgba(132, 147, 150, 0.18);
     --border-strong: rgba(195, 245, 255, 0.22);
-    --cyan: #00e5ff;
+    --cyan: #38bdf8;
     --cyan-soft: #c3f5ff;
-    --cyan-dim: rgba(0, 229, 255, 0.12);
-    --blue: #8fd6e4;
-    --purple: #8b5cf6;
+    --cyan-dim: rgba(56, 189, 248, 0.12);
+    --blue: #60a5fa;
+    --purple: #a78bfa;
     --red: #ef4444;
-    --green: #2ff801;
-    --amber: #ffc769;
-    --amber-deep: #ffba38;
+    --green: #34d399;
+    --amber: #fb923c;
+    --amber-deep: #f97316;
 
     /* Typography Colors */
     --text-primary: #dfe2eb;
@@ -979,7 +979,7 @@ body {
 }
 
 .waiters-y-axis .tick text {
-    fill: #1f2528;
+    fill: #d8e1ef;
 }
 
 #donut-chart,
@@ -1024,16 +1024,19 @@ svg text {
 
 .axis path,
 .axis line {
-    stroke: rgba(0, 245, 255, 0.12);
+    stroke: rgba(148, 163, 184, 0.26);
 }
 
 .axis text {
-    fill: var(--text-secondary);
+    fill: #cbd5e1;
     font-size: 15px;
+    paint-order: stroke;
+    stroke: rgba(2, 6, 23, 0.72);
+    stroke-width: 2px;
 }
 
 .axis .domain {
-    stroke: rgba(0, 245, 255, 0.15);
+    stroke: rgba(148, 163, 184, 0.34);
 }
 
 /* Gantt canvas */

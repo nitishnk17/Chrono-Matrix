@@ -106,10 +106,19 @@ const ProfilerCharts = (() => {
 
           // Grid
           const defs = svg.append('defs');
-          [[0, 'gr-c', '#4caf50', '#29b6f6'], [0, 'gr-w', '#ffb74d', '#e53935'], [0, 'gr-s', '#9e9e9e', '#cfd8dc'], [0, 'gr-co', '#f06292', '#f48fb1'], [0, 'gr-io', '#fbc02d', '#fff59d'], [0, 'gr-j', '#ba68c8', '#ce93d8']].forEach(([, id, c1, c2]) => {
+          const profileSeries = [
+               { key: 'COMPUTE', label: 'Compute', sum: d3.sum(binCompute), bins: binCompute, grad: 'gr-c' },
+               { key: 'LOCK_WAIT', label: 'Lock Wait', sum: d3.sum(binWait), bins: binWait, grad: 'gr-w' },
+               { key: 'SLEEP', label: 'Sleep', sum: d3.sum(binSleep), bins: binSleep, grad: 'gr-s' },
+               { key: 'COND_WAIT', label: 'Cond Wait', sum: d3.sum(binCond), bins: binCond, grad: 'gr-co' },
+               { key: 'IO_WAIT', label: 'I/O Wait', sum: d3.sum(binIO), bins: binIO, grad: 'gr-io' },
+               { key: 'THREAD_JOIN', label: 'Thread Join', sum: d3.sum(binJoin), bins: binJoin, grad: 'gr-j' }
+          ].map(s => ({ ...s, color: EventBus.colors[s.key] || '#94a3b8' }));
+
+          profileSeries.forEach(({ grad: id, color }) => {
                const g = defs.append('linearGradient').attr('id', id).attr('x1', '0%').attr('x2', '0%').attr('y1', '0%').attr('y2', '100%');
-               g.append('stop').attr('offset', '0%').attr('stop-color', c1).attr('stop-opacity', 0.5);
-               g.append('stop').attr('offset', '100%').attr('stop-color', c1).attr('stop-opacity', 0);
+               g.append('stop').attr('offset', '0%').attr('stop-color', color).attr('stop-opacity', 0.52);
+               g.append('stop').attr('offset', '100%').attr('stop-color', color).attr('stop-opacity', 0);
           });
 
           const g = svg.append('g').attr('transform', `translate(${M.left},${M.top})`);
@@ -128,15 +137,7 @@ const ProfilerCharts = (() => {
           };
 
           // Draw the arrays sorted by sum to keep small ones visible
-          const series = [
-               { sum: d3.sum(binCompute), bins: binCompute, color: '#4caf50', grad: 'gr-c' },
-               { sum: d3.sum(binWait), bins: binWait, color: '#e53935', grad: 'gr-w' },
-               { sum: d3.sum(binSleep), bins: binSleep, color: '#9e9e9e', grad: 'gr-s' },
-               { sum: d3.sum(binCond), bins: binCond, color: '#f06292', grad: 'gr-co' },
-               { sum: d3.sum(binIO), bins: binIO, color: '#fbc02d', grad: 'gr-io' },
-               { sum: d3.sum(binJoin), bins: binJoin, color: '#ba68c8', grad: 'gr-j' }
-          ];
-          series.sort((a, b) => b.sum - a.sum).forEach(s => makeArea(s.bins, s.color, s.grad));
+          profileSeries.sort((a, b) => b.sum - a.sum).forEach(s => makeArea(s.bins, s.color, s.grad));
 
           // Axes
           g.append('g').attr('class', 'axis').attr('transform', `translate(0,${iH})`)
@@ -148,10 +149,11 @@ const ProfilerCharts = (() => {
           g.append('text').attr('transform', 'rotate(-90)').attr('x', -iH / 2).attr('y', -50).attr('text-anchor', 'middle').attr('fill', '#94a3b8').attr('font-size', '10px').attr('font-family', 'JetBrains Mono, monospace').text('DURATION (µs)');
 
           // Legend
-          [[`T-${selectedTid} Compute`, '#4caf50'], [`T-${selectedTid} Lock Wait`, '#e53935'], [`T-${selectedTid} Sleep`, '#9e9e9e'], [`T-${selectedTid} Cond Wait`, '#f06292'], [`T-${selectedTid} I/O Wait`, '#fbc02d'], [`T-${selectedTid} Thread Join`, '#ba68c8']].forEach(([lbl, col], i) => {
+          profileSeries.forEach(({ label, color: col }, i) => {
+               const lbl = `T-${selectedTid} ${label}`;
                svg.append('rect').attr('x', M.left + (i % 3) * 110).attr('y', 4 + Math.floor(i / 3) * 12).attr('width', 8).attr('height', 8).attr('rx', 2).attr('fill', col);
                svg.append('text').attr('x', M.left + (i % 3) * 110 + 12).attr('y', 12 + Math.floor(i / 3) * 12)
-                    .attr('fill', 'var(--text-secondary)').attr('font-size', '11px').text(lbl);
+                    .attr('fill', '#cbd5e1').attr('font-size', '11px').text(lbl);
           });
 
           document.getElementById('profiler-meta').textContent =
@@ -187,7 +189,7 @@ const ProfilerCharts = (() => {
                     const tooltip = document.getElementById('global-tooltip');
                     tooltip.classList.add('visible');
                     tooltip.innerHTML = `
-                         <div class="tt-title">${d.data[0].replace('_', ' ')}</div>
+                         <div class="tt-title">${EventBus.label(d.data[0])}</div>
                          <div class="tt-row"><span class="tt-key">Count</span><span class="tt-val">${d.data[1]}</span></div>
                          <div class="tt-row"><span class="tt-key">Share</span><span class="tt-val">${((d.data[1] / data.length) * 100).toFixed(1)}%</span></div>
                     `;
@@ -212,7 +214,7 @@ const ProfilerCharts = (() => {
                legG.append('rect').attr('x', x).attr('y', y - 7).attr('width', 7).attr('height', 7).attr('rx', 1).attr('fill', col);
                legG.append('text').attr('x', x + 10).attr('y', y)
                     .attr('fill', '#7aa0c4').attr('font-size', '10px')
-                    .text(ev.replace('_', ' ').slice(0, 14) + ' (' + cnt + ')');
+                    .text(EventBus.label(ev).slice(0, 16) + ' (' + cnt + ')');
                i++;
           }
      }

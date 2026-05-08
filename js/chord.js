@@ -14,9 +14,11 @@ const ChordChart = (() => {
      let rafPending = false;
 
      const THREAD_COLOR = d3.scaleOrdinal()
-          .range(['#29b6f6', '#4caf50', '#ffb74d', '#e53935', '#ab47bc', '#58a6ff',
-               '#d4e157', '#ec407a', '#7e57c2', '#26a69a', '#8d6e63', '#78909c',
-               '#ff8a65', '#66bb6a', '#42a5f5', '#ba68c8', '#f06292', '#ce93d8']);
+          .range([
+               '#38bdf8', '#34d399', '#fb923c', '#f43f5e', '#a78bfa', '#60a5fa',
+               '#22c55e', '#e879f9', '#a855f7', '#14b8a6', '#facc15', '#94a3b8',
+               '#f97316', '#4ade80', '#7dd3fc', '#c084fc', '#fb7185', '#cbd5e1'
+          ]);
 
      function formatUs(v) {
           if (v >= 1e6) return (v / 1e6).toFixed(2) + 's';

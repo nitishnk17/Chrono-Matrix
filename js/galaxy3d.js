@@ -14,25 +14,14 @@ const GalaxyViz = (() => {
         'gc-pause': '#c084fc',
         'deadlock-demo': '#ef4444',
         io: '#06b6d4',
-        'io-contention': '#f59e0b',
+        'io-contention': '#fb923c',
         sync: '#14b8a6',
         dispatch: '#60a5fa',
         startup: '#94a3b8',
         shutdown: '#64748b'
     };
     const SC_FALLBACK = ['#38bdf8', '#22c55e', '#f97316', '#c084fc', '#f43f5e', '#14b8a6', '#eab308', '#60a5fa'];
-    const GALAXY_COL = {
-        COMPUTE: '#38bdf8',
-        LOCK_ACQUIRE: '#34d399',
-        LOCK_WAIT: '#f59e0b',
-        LOCK_WAIT_TIMEOUT: '#ef4444',
-        COND_WAIT: '#f472b6',
-        IO_WAIT: '#f59e0b',
-        SLEEP: '#64748b',
-        MEM_READ: '#38bdf8',
-        MEM_WRITE: '#f97316',
-        DEADLOCK_DETECTED: '#ef4444'
-    };
+    const GALAXY_COL = EventBus.colors;
     let traceData = [], sortedTrace = [], TIDS = [], TS_MIN = 0, TS_SPAN = 1;
     let stars = [], nebulae = [], bgStars = [];
     let playing = true, running = false, playPos = 0, animId = null;

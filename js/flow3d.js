@@ -5,18 +5,7 @@
  */
 
 const FlowViz = (() => {
-    const EV_COL = {
-        COMPUTE: '#00e5ff',
-        LOCK_ACQUIRE: '#10b981',
-        LOCK_WAIT: '#f59e0b',
-        LOCK_WAIT_TIMEOUT: '#ef4444',
-        LOCK_RELEASE: '#64748b',
-        DEADLOCK_DETECTED: '#e11d48',
-        MEM_READ: '#38bdf8',
-        MEM_WRITE: '#f97316',
-        MEM_ALLOC: '#22c55e',
-        MEM_FREE: '#a855f7'
-    };
+    const EV_COL = EventBus.colors;
     const SPEEDS = [0.5, 1, 2, 4];
     const SPD_LBL = ['½×', '1×', '2×', '4×'];
 
@@ -179,7 +168,7 @@ const FlowViz = (() => {
         eb.innerHTML = Object.entries(byEvent).map(([ev, n]) => `
             <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
                 <div style="width:9px;height:9px;border-radius:50%;background:${EV_COL[ev] || '#fff'};box-shadow:0 0 4px ${EV_COL[ev] || '#fff'};flex-shrink:0"></div>
-                <span style="font-size:0.62rem;color:var(--text-muted);flex:1">${ev.replace(/_/g, ' ')}</span>
+                <span style="font-size:0.62rem;color:var(--text-secondary);flex:1">${EventBus.label(ev)}</span>
                 <span style="font-family:var(--font-code);font-size:0.58rem;color:var(--cyan)">${n.toLocaleString()}</span>
             </div>
             <div style="height:3px;background:rgba(255,255,255,.05);border-radius:2px;margin-bottom:7px">
@@ -233,8 +222,8 @@ const FlowViz = (() => {
             const hit = particles.find(p => Math.abs(p.x - rx) < p.w + 4 && Math.abs(p.y - ry) < p.h + 3);
             const ttp = document.getElementById('fl-tooltip');
             if (hit && ttp) {
-                const descs = { COMPUTE: 'Thread is actively computing', LOCK_ACQUIRE: 'Grabbed a mutex lock', LOCK_WAIT: 'Blocked — waiting for lock', LOCK_WAIT_TIMEOUT: 'Timed out while waiting for lock', LOCK_RELEASE: 'Released mutex lock', DEADLOCK_DETECTED: 'Deadlock — permanently stuck', MEM_READ: 'Read shared memory', MEM_WRITE: 'Wrote shared memory', MEM_ALLOC: 'Allocated memory', MEM_FREE: 'Freed memory' };
-                document.getElementById('fl-tt-n').textContent = hit.event.replace(/_/g, ' ');
+                const descs = { COMPUTE: 'Thread is actively computing', LOCK_ACQUIRE: 'Grabbed a mutex lock', LOCK_WAIT: 'Blocked - waiting for lock', LOCK_WAIT_TIMEOUT: 'Timed out while waiting for lock', LOCK_RELEASE: 'Released mutex lock', DEADLOCK_DETECTED: 'Deadlock detected', MEM_READ: 'Read shared memory', MEM_WRITE: 'Wrote shared memory', MEM_ALLOC: 'Allocated memory', MEM_FREE: 'Freed memory' };
+                document.getElementById('fl-tt-n').textContent = EventBus.label(hit.event);
                 document.getElementById('fl-tt-t').textContent = 'T' + hit.tid;
                 document.getElementById('fl-tt-e').textContent = descs[hit.event] || hit.event;
                 document.getElementById('fl-tt-d').textContent = hit.dur.toLocaleString() + ' µs';

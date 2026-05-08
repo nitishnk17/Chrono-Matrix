@@ -51,7 +51,7 @@ const DependencyGraph = (() => {
                .style('overflow', 'visible')
                .append('svg:path')
                .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-               .attr('fill', '#ff3366')
+               .attr('fill', EventBus.colors.LOCK_WAIT)
                .style('stroke', 'none');
 
           // Allow zoom/pan
@@ -322,8 +322,8 @@ const DependencyGraph = (() => {
                .append('circle')
                .attr('class', 'node')
                .attr('r', d => d.isAggregate ? 22 : 16)
-               .attr('fill', '#1a2332') // dark blueish inline with dark theme
-               .attr('stroke', d => d.isAggregate ? '#9e9e9e' : '#00f5ff')
+               .attr('fill', '#111827')
+               .attr('stroke', d => d.isAggregate ? '#94a3b8' : EventBus.colors.COMPUTE)
                .attr('stroke-width', 2)
                .attr('stroke-dasharray', d => d.isAggregate ? '4,4' : 'none')
                .call(d3.drag()
@@ -347,7 +347,10 @@ const DependencyGraph = (() => {
                .attr('class', 'label')
                .attr('text-anchor', 'middle')
                .attr('dy', 4)
-               .attr('fill', '#fff')
+               .attr('fill', '#f8fafc')
+               .attr('stroke', '#020617')
+               .attr('stroke-width', 3)
+               .attr('paint-order', 'stroke')
                .attr('font-size', '10px')
                .style('pointer-events', 'none')
                .text(d => `T-${d.id}`);
@@ -364,7 +367,7 @@ const DependencyGraph = (() => {
                .append('path')
                .attr('class', 'link')
                .attr('fill', 'none')
-               .attr('stroke', '#ff3366') // red for wait/contention
+               .attr('stroke', EventBus.colors.LOCK_WAIT)
                .attr('stroke-width', d => Math.max(2.0, Math.min(8, Math.sqrt(d.waitCount) + 1)))
                .attr('opacity', 0.8)
                .attr('marker-end', 'url(#arrowhead)')
@@ -498,7 +501,7 @@ const DependencyGraph = (() => {
           // Highlight nodes if selected elsewhere
           EventBus.on('threadSelect', ({ tid }) => {
                nodeGroup.selectAll('.node')
-                    .attr('stroke', d => d.id === tid ? '#39ff14' : '#00f5ff')
+                    .attr('stroke', d => d.id === tid ? EventBus.colors.LOCK_ACQUIRE : EventBus.colors.COMPUTE)
                     .attr('stroke-width', d => d.id === tid ? 4 : 2);
           });
      }

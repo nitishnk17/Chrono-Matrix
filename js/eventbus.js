@@ -22,10 +22,33 @@ const EVENT_COLORS = {
     'MEM_FREE':          '#a855f7',   // purple     — free
 };
 
+const EVENT_LABELS = {
+    'COMPUTE': 'Compute',
+    'IO_WAIT': 'I/O Wait',
+    'SLEEP': 'Sleep',
+    'COND_WAIT': 'Condition Wait',
+    'LOCK_WAIT': 'Lock Wait',
+    'LOCK_WAIT_TIMEOUT': 'Lock Timeout',
+    'LOCK_ACQUIRE': 'Lock Acquire',
+    'LOCK_RELEASE': 'Lock Release',
+    'THREAD_JOIN': 'Thread Join',
+    'THREAD_START': 'Thread Start',
+    'THREAD_END': 'Thread End',
+    'DEADLOCK_DETECTED': 'Deadlock Detected',
+    'MEM_READ': 'Memory Read',
+    'MEM_WRITE': 'Memory Write',
+    'MEM_ALLOC': 'Memory Alloc',
+    'MEM_FREE': 'Memory Free',
+};
+
 const EventBus = (() => {
     const listeners = {};
     return {
         colors: EVENT_COLORS,
+        labels: EVENT_LABELS,
+        label(event) {
+            return EVENT_LABELS[event] || String(event || 'Unknown').replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        },
         on(event, cb) {
             if (!listeners[event]) listeners[event] = [];
             listeners[event].push(cb);

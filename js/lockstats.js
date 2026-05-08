@@ -65,8 +65,8 @@ const LockStats = (() => {
           const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
           const gradEl = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
           gradEl.id = 'wfall-grad'; gradEl.setAttribute('x1', '0%'); gradEl.setAttribute('x2', '100%');
-          const s1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', '#e53935');
-          const s2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', '#ab47bc');
+          const s1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', EventBus.colors.LOCK_WAIT);
+          const s2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', EventBus.colors.DEADLOCK_DETECTED);
           gradEl.appendChild(s1); gradEl.appendChild(s2); defs.appendChild(gradEl);
 
           const svg = d3.select(container).append('svg')

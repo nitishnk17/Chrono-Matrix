@@ -122,7 +122,7 @@ var Timeline3D = (() => {
         bins.forEach((row,r)=>row.forEach((b,c)=>{
             rawH[r][c] = Math.sqrt(b.total/maxBin);
             const dom = Object.entries(b.ev).sort((a,b)=>b[1]-a[1])[0];
-            if (dom){ gridEv[r][c]=dom[0]; gridCol[r][c]=COL()[dom[0]]||'#00e5ff'; }
+            if (dom){ gridEv[r][c]=dom[0]; gridCol[r][c]=COL()[dom[0]]||'#38bdf8'; }
         }));
 
         // Apply 3-tap smoothing to height (makes beautiful continuous ridges)
@@ -293,7 +293,7 @@ var Timeline3D = (() => {
                 // Draw deadlock warning pulse
                 if (points[c].ev === 'DEADLOCK_DETECTED') {
                     ctx.save();
-                    ctx.shadowColor = '#e11d48';
+                    ctx.shadowColor = EventBus.colors.DEADLOCK_DETECTED;
                     ctx.shadowBlur = 20;
                     ctx.fillStyle = '#fff';
                     ctx.beginPath();

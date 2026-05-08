@@ -287,7 +287,13 @@ const OverviewCharts = (() => {
           const H = 220;
           const radius = Math.min(W, H) / 2 - 20;
 
-          const COLORS = { producer_consumer: '#29b6f6', deadlock: '#e53935', false_sharing: '#ffb74d' };
+          const COLORS = {
+               producer_consumer: EventBus.colors.COMPUTE,
+               deadlock: EventBus.colors.DEADLOCK_DETECTED,
+               'deadlock-demo': EventBus.colors.DEADLOCK_DETECTED,
+               false_sharing: EventBus.colors.MEM_WRITE,
+               uncategorized: '#94a3b8'
+          };
           const LABELS = {
                producer_consumer: 'Producer-Consumer',
                deadlock: 'Deadlock',
@@ -392,8 +398,8 @@ const OverviewCharts = (() => {
           // Gradient for bars
           const defs = svg.append('defs');
           const grad = defs.append('linearGradient').attr('id', 'waiter-grad').attr('x1', '0%').attr('x2', '100%');
-          grad.append('stop').attr('offset', '0%').attr('stop-color', '#e53935');
-          grad.append('stop').attr('offset', '100%').attr('stop-color', '#ab47bc');
+          grad.append('stop').attr('offset', '0%').attr('stop-color', EventBus.colors.LOCK_WAIT);
+          grad.append('stop').attr('offset', '100%').attr('stop-color', EventBus.colors.DEADLOCK_DETECTED);
 
           g.selectAll('.w-bar')
                .data(sorted)
@@ -449,16 +455,8 @@ const OverviewCharts = (() => {
           container.innerHTML = '';
 
           const counts = d3.rollup(filteredData, v => v.length, d => d.event);
-          const COLORS = {
-               COMPUTE: '#4caf50', SLEEP: '#94a3b8', IO_WAIT: '#fbc02d', COND_WAIT: '#f472b6',
-               LOCK_ACQUIRE: '#fb923c', LOCK_WAIT: '#f87171', LOCK_WAIT_TIMEOUT: '#ef4444', LOCK_RELEASE: '#38bdf8',
-               DEADLOCK_DETECTED: '#c084fc', MEM_READ: '#38bdf8', MEM_WRITE: '#f97316', MEM_ALLOC: '#22c55e', MEM_FREE: '#a855f7'
-          };
-          const LABELS = {
-               COMPUTE: 'COMPUTE', SLEEP: 'SLEEP', IO_WAIT: 'I/O WAIT', COND_WAIT: 'COND WAIT',
-               LOCK_ACQUIRE: 'ACQUIRE', LOCK_WAIT: 'LOCK WAIT', LOCK_WAIT_TIMEOUT: 'WAIT TIMEOUT', LOCK_RELEASE: 'RELEASE',
-               DEADLOCK_DETECTED: 'DEADLOCK', MEM_READ: 'MEM READ', MEM_WRITE: 'MEM WRITE', MEM_ALLOC: 'MEM ALLOC', MEM_FREE: 'MEM FREE'
-          };
+          const COLORS = EventBus.colors;
+          const LABELS = Object.fromEntries(Object.keys(COLORS).map(ev => [ev, EventBus.label(ev).toUpperCase()]));
           const ORDER = ['COMPUTE', 'LOCK_ACQUIRE', 'LOCK_WAIT', 'LOCK_WAIT_TIMEOUT', 'LOCK_RELEASE', 'SLEEP', 'IO_WAIT', 'COND_WAIT', 'MEM_READ', 'MEM_WRITE', 'MEM_ALLOC', 'MEM_FREE', 'DEADLOCK_DETECTED'];
           const data2 = ORDER.filter(e => counts.has(e)).map(e => ({ ev: e, cnt: counts.get(e) }));
 
@@ -539,7 +537,7 @@ const OverviewCharts = (() => {
                .attr('x', d => xScl(d.cnt) + 5)
                .attr('y', d => yScl(d.ev) + yScl.bandwidth() / 2)
                .attr('dy', '0.35em')
-               .attr('fill', '#64748b')
+               .attr('fill', '#cbd5e1')
                .attr('font-size', '10px')
                .attr('font-family', "'JetBrains Mono',monospace")
                .text(d => d.cnt >= 1000 ? (d.cnt / 1000).toFixed(1) + 'k' : d.cnt);
