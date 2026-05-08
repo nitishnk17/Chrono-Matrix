@@ -2,12 +2,14 @@
  * aireport.js — local trace report generator
  *
  * Produces a deterministic diagnostic report from the loaded trace.
- * Optional model settings can be saved for future AI-backed integrations.
+ * When model settings are saved, it can also ask an external AI provider
+ * for a narrative optimization report.
  */
 
 const AIReport = (() => {
      let allData = [];
      const STORAGE_KEY = 'cm_ai_model_settings';
+     let controlsBound = false;
 
      function formatUs(v) {
           if (v >= 1e6) return (v / 1e6).toFixed(2) + 's';
@@ -187,6 +189,113 @@ const AIReport = (() => {
           status.dataset.tone = tone;
      }
 
+     function escapeHTML(value) {
+          return String(value ?? '').replace(/[&<>"']/g, ch => ({
+               '&': '&amp;',
+               '<': '&lt;',
+               '>': '&gt;',
+               '"': '&quot;',
+               "'": '&#39;'
+          }[ch]));
+     }
+
+     function stripMarkdownNumbering(value) {
+          return String(value || '').replace(/^\s*(?:\d+[\).]|[-*•])\s*/, '').trim();
+     }
+
+     function inlineMarkdownToHTML(value) {
+          return escapeHTML(value || '')
+               .replace(/`([^`]+)`/g, '<code>$1</code>')
+               .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+               .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+     }
+
+     function compactReportForModel(report) {
+          const s = report.summary;
+          return {
+               summary: {
+                    events: s.events,
+                    threads: s.threads,
+                    scenarios: s.scenarios,
+                    trace_window_us: Math.round(s.duration),
+                    compute_time_us: Math.round(s.computeTime),
+                    wait_time_us: Math.round(s.waitTime),
+                    wait_share: pct(s.waitTime, s.totalThreadTime),
+                    lock_wait_events: s.lockWaits,
+                    timeouts: s.timeouts,
+                    deadlocks: s.deadlocks,
+                    memory_events: s.memoryEvents
+               },
+               top_events: report.topEvents.map(([event, count]) => ({ event, count })),
+               top_waiting_threads: report.topThreads.map(([tid, t]) => ({
+                    tid,
+                    wait_us: Math.round(t.wait),
+                    compute_us: Math.round(t.compute),
+                    events: t.events,
+                    memory_events: t.memory,
+                    deadlocks: t.deadlocks
+               })),
+               hot_resources: report.hotResources.map(([resource, r]) => ({
+                    resource,
+                    wait_us: Math.round(r.wait),
+                    events: r.events,
+                    deadlocks: r.deadlocks,
+                    timeouts: r.timeouts
+               })),
+               scenarios: report.busiestScenarios.map(([scenario, count]) => ({ scenario, count })),
+               local_findings: report.issues,
+               local_recommendations: report.recommendations,
+               local_corrections: report.corrections
+          };
+     }
+
+     function buildModelPrompt(report) {
+          return `You are analyzing a Chrono-Matrix multithreaded execution trace.
+
+Return a concise engineering report with these exact sections:
+1. Overview of what the data contains
+2. Problems detected and severity
+3. Optimization plan
+4. Concrete correction steps
+5. What to verify after the next run
+
+Be specific, practical, and do not invent measurements that are not in the JSON.
+
+Trace summary JSON:
+${JSON.stringify(compactReportForModel(report), null, 2)}`;
+     }
+
+     function getSettingsFromForm({ persist = false } = {}) {
+          const previous = readSettings();
+          const provider = document.getElementById('ai-provider')?.value || previous.provider || 'local';
+          const model = document.getElementById('ai-model')?.value.trim() || previous.model || '';
+          const endpoint = document.getElementById('ai-endpoint')?.value.trim() || previous.endpoint || '';
+          const keyInput = document.getElementById('ai-api-key')?.value.trim() || '';
+          const apiKey = keyInput || previous.apiKey || '';
+
+          const settings = {
+               provider,
+               model,
+               endpoint,
+               hasKey: Boolean(apiKey),
+               keyPreview: apiKey ? maskKey(apiKey) : '',
+               apiKey
+          };
+
+          if (provider === 'local') {
+               settings.hasKey = false;
+               settings.keyPreview = '';
+               settings.apiKey = '';
+          }
+
+          if (persist) {
+               localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+               if (document.getElementById('ai-api-key')) document.getElementById('ai-api-key').value = '';
+          }
+
+          return settings;
+     }
+
      function maskKey(key) {
           if (!key) return '';
           if (key.length <= 8) return 'saved';
@@ -207,31 +316,9 @@ const AIReport = (() => {
      }
 
      function saveSettings() {
-          const provider = document.getElementById('ai-provider')?.value || 'local';
-          const model = document.getElementById('ai-model')?.value.trim() || '';
-          const endpoint = document.getElementById('ai-endpoint')?.value.trim() || '';
-          const key = document.getElementById('ai-api-key')?.value.trim() || '';
-          const previous = readSettings();
-
-          const settings = {
-               provider,
-               model,
-               endpoint,
-               hasKey: Boolean(key || previous.hasKey),
-               keyPreview: key ? maskKey(key) : previous.keyPreview,
-               // This is convenient for local demos, but not suitable for production.
-               apiKey: key || previous.apiKey || ''
-          };
-
-          if (provider === 'local') {
-               settings.hasKey = false;
-               settings.keyPreview = '';
-               settings.apiKey = '';
-          }
-
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-          if (document.getElementById('ai-api-key')) document.getElementById('ai-api-key').value = '';
-          writeStatus(settings.hasKey ? `Saved ${provider} settings (${settings.keyPreview})` : 'Using local rule-based report', settings.hasKey ? 'saved' : '');
+          const settings = getSettingsFromForm({ persist: true });
+          writeStatus(settings.hasKey ? `Saved ${settings.provider} settings (${settings.keyPreview})` : 'Using local rule-based report', settings.hasKey ? 'saved' : '');
+          return settings;
      }
 
      function clearSettings() {
@@ -240,29 +327,269 @@ const AIReport = (() => {
           writeStatus('AI key cleared. Local report mode is active.', 'cleared');
      }
 
-     function renderReport() {
+     function providerDefaults(provider) {
+          return {
+               openai: {
+                    endpoint: 'https://api.openai.com/v1/chat/completions',
+                    model: 'gpt-4o-mini'
+               },
+               openrouter: {
+                    endpoint: 'https://openrouter.ai/api/v1/chat/completions',
+                    model: 'openai/gpt-4o-mini'
+               },
+               anthropic: {
+                    endpoint: 'https://api.anthropic.com/v1/messages',
+                    model: 'claude-3-5-haiku-latest'
+               },
+               gemini: {
+                    endpoint: 'https://generativelanguage.googleapis.com/v1beta',
+                    model: 'gemini-1.5-flash'
+               },
+               custom: {
+                    endpoint: '',
+                    model: ''
+               }
+          }[provider] || { endpoint: '', model: '' };
+     }
+
+     function validateRemoteSettings(settings) {
+          if (!settings || settings.provider === 'local') return 'local';
+          if (!settings.apiKey) return 'Add an API key or choose Local rules only.';
+          if (!settings.model && !providerDefaults(settings.provider).model) return 'Add the model name for this provider.';
+          if (settings.provider === 'custom' && !settings.endpoint) return 'Add an endpoint URL for the custom provider.';
+          return '';
+     }
+
+     function messagesFor(prompt) {
+          return [
+               {
+                    role: 'system',
+                    content: 'You are a senior performance engineer. Write precise, practical optimization guidance for multithreaded C/C++ traces.'
+               },
+               { role: 'user', content: prompt }
+          ];
+     }
+
+     async function parseJSONResponse(response, provider) {
+          const text = await response.text();
+          let json = null;
+          try {
+               json = text ? JSON.parse(text) : null;
+          } catch {
+               throw new Error(`The ${provider} endpoint did not return JSON. ${text.slice(0, 160)}`);
+          }
+
+          if (!response.ok) {
+               const message = json?.error?.message || json?.error || json?.message || response.statusText;
+               throw new Error(`${provider} request failed (${response.status}): ${message}`);
+          }
+
+          return json;
+     }
+
+     async function requestOpenAICompatible(settings, prompt, defaults = {}) {
+          const endpoint = settings.endpoint || defaults.endpoint;
+          const model = settings.model || defaults.model;
+          const response = await fetch(endpoint, {
+               method: 'POST',
+               headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${settings.apiKey}`
+               },
+               body: JSON.stringify({
+                    model,
+                    messages: messagesFor(prompt),
+                    temperature: 0.2,
+                    max_tokens: 900
+               })
+          });
+          const json = await parseJSONResponse(response, settings.provider);
+          return json?.choices?.[0]?.message?.content || json?.choices?.[0]?.text || '';
+     }
+
+     async function requestAnthropic(settings, prompt) {
+          const defaults = providerDefaults('anthropic');
+          const response = await fetch(settings.endpoint || defaults.endpoint, {
+               method: 'POST',
+               headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': settings.apiKey,
+                    'anthropic-version': '2023-06-01',
+                    'anthropic-dangerous-direct-browser-access': 'true'
+               },
+               body: JSON.stringify({
+                    model: settings.model || defaults.model,
+                    max_tokens: 900,
+                    temperature: 0.2,
+                    messages: [{ role: 'user', content: prompt }]
+               })
+          });
+          const json = await parseJSONResponse(response, 'anthropic');
+          return (json?.content || []).map(part => part.text || '').join('\n').trim();
+     }
+
+     async function requestGemini(settings, prompt) {
+          const defaults = providerDefaults('gemini');
+          const base = (settings.endpoint || defaults.endpoint).replace(/\/$/, '');
+          const model = encodeURIComponent(settings.model || defaults.model);
+          const url = `${base}/models/${model}:generateContent?key=${encodeURIComponent(settings.apiKey)}`;
+          const response = await fetch(url, {
+               method: 'POST',
+               headers: { 'Content-Type': 'application/json' },
+               body: JSON.stringify({
+                    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                    generationConfig: {
+                         temperature: 0.2,
+                         maxOutputTokens: 900
+                    }
+               })
+          });
+          const json = await parseJSONResponse(response, 'gemini');
+          return json?.candidates?.[0]?.content?.parts?.map(part => part.text || '').join('\n').trim() || '';
+     }
+
+     async function requestAIReport(settings, report) {
+          const validation = validateRemoteSettings(settings);
+          if (validation === 'local') return null;
+          if (validation) throw new Error(validation);
+
+          const prompt = buildModelPrompt(report);
+          if (settings.provider === 'anthropic') return requestAnthropic(settings, prompt);
+          if (settings.provider === 'gemini') return requestGemini(settings, prompt);
+          if (settings.provider === 'openrouter') return requestOpenAICompatible(settings, prompt, providerDefaults('openrouter'));
+          if (settings.provider === 'custom') return requestOpenAICompatible(settings, prompt, providerDefaults('custom'));
+          return requestOpenAICompatible(settings, prompt, providerDefaults('openai'));
+     }
+
+     function renderModelText(text) {
+          const source = String(text || '').trim();
+          if (!source) return '<p>The model returned an empty response.</p>';
+          return source
+               .split(/\n{2,}/)
+               .map(block => `<p>${inlineMarkdownToHTML(block).replace(/\n/g, '<br>')}</p>`)
+               .join('');
+     }
+
+     function sectionTextToHTML(text) {
+          const source = String(text || '').trim();
+          if (!source) return '';
+          const items = source
+               .split(/\n+/)
+               .map(stripMarkdownNumbering)
+               .filter(Boolean);
+
+          if (items.length > 1) {
+               return `<ol class="ai-list">${items.map(item => `<li>${inlineMarkdownToHTML(item)}</li>`).join('')}</ol>`;
+          }
+          return `<div class="ai-model-text"><p>${inlineMarkdownToHTML(items[0] || source)}</p></div>`;
+     }
+
+     function parseAISections(text) {
+          const sections = {
+               overview: '',
+               problems: '',
+               optimization: '',
+               corrections: '',
+               verify: '',
+               raw: text || ''
+          };
+
+          const headingMap = [
+               ['overview', /overview|what the data contains/i],
+               ['problems', /problem|severity|detected/i],
+               ['optimization', /optimization|optimize|plan/i],
+               ['corrections', /correction|correct|steps/i],
+               ['verify', /verify|next run|validation/i]
+          ];
+          let current = 'overview';
+
+          String(text || '').split('\n').forEach(line => {
+               const cleaned = line.replace(/^\s*\d+[\).:-]?\s*/, '').replace(/^#+\s*/, '').trim();
+               const matched = headingMap.find(([, rx]) => rx.test(cleaned) && cleaned.length < 90);
+               if (matched) {
+                    current = matched[0];
+                    return;
+               }
+               if (!sections[current]) sections[current] = '';
+               sections[current] += `${line}\n`;
+          });
+
+          Object.keys(sections).forEach(key => {
+               sections[key] = String(sections[key] || '').trim();
+          });
+          return sections;
+     }
+
+     function modelPanel({ state, provider, model, text, error }) {
+          if (state === 'loading') {
+               return `<div class="panel ai-model-panel ai-loading">
+                    <div class="panel-header"><div class="panel-title"><div class="icon">AI</div>MODEL REPORT</div><span class="panel-meta">Contacting ${escapeHTML(provider)}...</span></div>
+                    <p>Generating provider-backed analysis from the loaded trace. The local report below is already available.</p>
+               </div>`;
+          }
+
+          if (state === 'error') {
+               return `<div class="panel ai-model-panel ai-error">
+                    <div class="panel-header"><div class="panel-title"><div class="icon">!</div>MODEL REQUEST FAILED</div><span class="panel-meta">Local fallback shown</span></div>
+                    <p>${escapeHTML(error)}</p>
+                    <p class="ai-report-note">If this is a browser CORS error, use a custom backend proxy endpoint and select Custom / OpenAI-compatible. API keys in browser localStorage are convenient for demos, not production-safe.</p>
+               </div>`;
+          }
+
+          if (!text) return '';
+          return `<div class="panel ai-model-panel">
+               <div class="panel-header"><div class="panel-title"><div class="icon">AI</div>MODEL REPORT</div><span class="panel-meta">${escapeHTML(provider)} · ${escapeHTML(model)}</span></div>
+               <div class="ai-model-text">${renderModelText(text)}</div>
+          </div>`;
+     }
+
+     function renderLocalReport(report, settings, modelBlock = '', aiText = '') {
           const content = document.getElementById('ai-report-content');
           const status = document.getElementById('ai-report-status');
           if (!content) return;
-
-          if (!allData.length) {
-               content.innerHTML = `<div class="panel ai-empty-report">
-                    <div class="empty-report-title">No trace loaded</div>
-                    <p>Load a sample trace or upload a JSON file first. Then this report will summarize performance risks and corrections.</p>
-               </div>`;
-               if (status) status.textContent = 'Waiting for trace data';
-               return;
-          }
-
-          const report = computeReport(allData);
           const s = report.summary;
-          const settings = readSettings();
+          const aiSections = aiText ? parseAISections(aiText) : null;
           const modeLabel = settings.hasKey && settings.provider !== 'local'
-               ? `${settings.provider} settings saved`
+               ? (aiText ? `${settings.provider} AI generated` : `${settings.provider} settings saved`)
                : 'local analysis';
           if (status) status.textContent = `${s.events.toLocaleString()} events analyzed · ${report.issues.length} finding${report.issues.length === 1 ? '' : 's'} · ${modeLabel}`;
 
+          const diagnosisHTML = aiSections?.problems
+               ? sectionTextToHTML(aiSections.problems)
+               : `<div class="ai-finding-list">
+                    ${report.issues.map(issue => `<div class="ai-finding ${issue.level}">
+                         <b>${issue.title}</b>
+                         <p>${issue.body}</p>
+                    </div>`).join('')}
+               </div>`;
+
+          const optimizationHTML = aiSections?.optimization
+               ? sectionTextToHTML(aiSections.optimization)
+               : `<ol class="ai-list">${report.recommendations.map(x => `<li>${x}</li>`).join('')}</ol>`;
+
+          const correctionHTML = aiSections?.corrections
+               ? sectionTextToHTML(aiSections.corrections)
+               : `<ol class="ai-list">${(report.corrections.length ? report.corrections : ['No critical correction is required by the current rules; continue by validating hot phases in Timeline and Profiler.']).map(x => `<li>${x}</li>`).join('')}</ol>`;
+
+          const overviewHTML = aiSections?.overview
+               ? `<div class="ai-model-text">${renderModelText(aiSections.overview)}</div>`
+               : `<div class="ai-chip-row">
+                    ${report.topEvents.map(([ev, n]) => `<span>${eventLabel(ev)} <b>${n.toLocaleString()}</b></span>`).join('')}
+               </div>
+               <div class="ai-chip-row">
+                    ${report.busiestScenarios.map(([sc, n]) => `<span>${String(sc).replace(/_/g, ' ')} <b>${n.toLocaleString()}</b></span>`).join('')}
+               </div>`;
+
+          const verifyHTML = aiSections?.verify
+               ? `<div class="panel ai-model-panel">
+                    <div class="panel-header"><div class="panel-title"><div class="icon">✓</div>WHAT TO VERIFY AFTER NEXT RUN</div><span class="panel-meta">AI generated</span></div>
+                    ${sectionTextToHTML(aiSections.verify)}
+               </div>`
+               : '';
+
           content.innerHTML = `
+               ${modelBlock}
+
                <div class="ai-report-grid">
                     ${metricCard('Events', s.events.toLocaleString(), `${s.threads} threads · ${s.scenarios} scenarios`)}
                     ${metricCard('Trace Window', formatUs(s.duration), 'wall-clock span')}
@@ -274,17 +601,12 @@ const AIReport = (() => {
 
                <div class="ai-report-columns">
                     <div class="panel">
-                         <div class="panel-header"><div class="panel-title"><div class="icon">!</div>PROBLEM DIAGNOSIS</div></div>
-                         <div class="ai-finding-list">
-                              ${report.issues.map(issue => `<div class="ai-finding ${issue.level}">
-                                   <b>${issue.title}</b>
-                                   <p>${issue.body}</p>
-                              </div>`).join('')}
-                         </div>
+                         <div class="panel-header"><div class="panel-title"><div class="icon">!</div>${aiText ? 'AI PROBLEM DIAGNOSIS' : 'PROBLEM DIAGNOSIS'}</div><span class="panel-meta">${aiText ? 'model generated' : 'local rules'}</span></div>
+                         ${diagnosisHTML}
                     </div>
                     <div class="panel">
-                         <div class="panel-header"><div class="panel-title"><div class="icon">↗</div>OPTIMIZATION PLAN</div></div>
-                         <ol class="ai-list">${report.recommendations.map(x => `<li>${x}</li>`).join('')}</ol>
+                         <div class="panel-header"><div class="panel-title"><div class="icon">↗</div>${aiText ? 'AI OPTIMIZATION PLAN' : 'OPTIMIZATION PLAN'}</div><span class="panel-meta">${aiText ? 'model generated' : 'local rules'}</span></div>
+                         ${optimizationHTML}
                     </div>
                </div>
 
@@ -300,20 +622,62 @@ const AIReport = (() => {
                </div>
 
                <div class="panel">
-                    <div class="panel-header"><div class="panel-title"><div class="icon">✓</div>HOW TO CORRECT DETECTED PROBLEMS</div></div>
-                    <ol class="ai-list">${(report.corrections.length ? report.corrections : ['No critical correction is required by the current rules; continue by validating hot phases in Timeline and Profiler.']).map(x => `<li>${x}</li>`).join('')}</ol>
+                    <div class="panel-header"><div class="panel-title"><div class="icon">✓</div>${aiText ? 'AI CORRECTION STEPS' : 'HOW TO CORRECT DETECTED PROBLEMS'}</div><span class="panel-meta">${aiText ? 'model generated' : 'local rules'}</span></div>
+                    ${correctionHTML}
                </div>
 
+               ${verifyHTML}
+
                <div class="panel">
-                    <div class="panel-header"><div class="panel-title"><div class="icon">≡</div>WHAT THE DATA CONTAINS</div></div>
-                    <div class="ai-chip-row">
-                         ${report.topEvents.map(([ev, n]) => `<span>${eventLabel(ev)} <b>${n.toLocaleString()}</b></span>`).join('')}
-                    </div>
-                    <div class="ai-chip-row">
-                         ${report.busiestScenarios.map(([sc, n]) => `<span>${String(sc).replace(/_/g, ' ')} <b>${n.toLocaleString()}</b></span>`).join('')}
-                    </div>
+                    <div class="panel-header"><div class="panel-title"><div class="icon">≡</div>${aiText ? 'AI DATA OVERVIEW' : 'WHAT THE DATA CONTAINS'}</div><span class="panel-meta">${aiText ? 'model generated' : 'local summary'}</span></div>
+                    ${overviewHTML}
                </div>
           `;
+     }
+
+     async function renderReport() {
+          const content = document.getElementById('ai-report-content');
+          const status = document.getElementById('ai-report-status');
+          if (!content) return;
+
+          if (!allData.length) {
+               content.innerHTML = `<div class="panel ai-empty-report">
+                    <div class="empty-report-title">No trace loaded</div>
+                    <p>Load a sample trace or upload a JSON file first. Then this report will summarize performance risks and corrections.</p>
+               </div>`;
+               if (status) status.textContent = 'Waiting for trace data';
+               return;
+          }
+
+          const report = computeReport(allData);
+          const settings = getSettingsFromForm({ persist: true });
+          writeStatus(settings.hasKey ? `Saved ${settings.provider} settings (${settings.keyPreview})` : 'Using local rule-based report', settings.hasKey ? 'saved' : '');
+
+          if (!settings.hasKey || settings.provider === 'local') {
+               renderLocalReport(report, settings);
+               return;
+          }
+
+          const modelName = settings.model || providerDefaults(settings.provider).model || 'model';
+          renderLocalReport(report, settings, modelPanel({ state: 'loading', provider: settings.provider, model: modelName }));
+
+          try {
+               const text = await requestAIReport(settings, report);
+               renderLocalReport(
+                    report,
+                    settings,
+                    modelPanel({
+                         state: 'ready',
+                         provider: settings.provider,
+                         model: modelName,
+                         text: 'AI response applied to the report sections below.'
+                    }),
+                    text
+               );
+          } catch (err) {
+               renderLocalReport(report, settings, modelPanel({ state: 'error', error: err?.message || String(err) }));
+               if (status) status.textContent = `${report.summary.events.toLocaleString()} events analyzed · model request failed · local fallback`;
+          }
      }
 
      function init(data) {
@@ -328,6 +692,8 @@ const AIReport = (() => {
      }
 
      function bindControls() {
+          if (controlsBound) return;
+          controlsBound = true;
           document.getElementById('btn-generate-report')?.addEventListener('click', renderReport);
           document.getElementById('btn-save-ai-key')?.addEventListener('click', saveSettings);
           document.getElementById('btn-clear-ai-key')?.addEventListener('click', clearSettings);

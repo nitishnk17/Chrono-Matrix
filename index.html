@@ -637,7 +637,7 @@ LD_PRELOAD=./tracer/libcmhijack.so ./tracer/producer_consumer</code></pre>
                         </div>
                         <div class="ai-report-actions">
                             <button class="btn" id="btn-generate-report">Generate Report</button>
-                            <span class="ai-report-note">Local rule-based analysis: overview, problems, optimization ideas, and correction steps.</span>
+                            <span class="ai-report-note">Uses your saved AI provider when available; otherwise falls back to local rule-based diagnosis.</span>
                         </div>
                     </div>
                     <div class="panel ai-key-panel">
@@ -659,7 +659,7 @@ LD_PRELOAD=./tracer/libcmhijack.so ./tracer/producer_consumer</code></pre>
                             </label>
                             <label class="ai-field">
                                 <span>Model</span>
-                                <input id="ai-model" class="ai-input" type="text" placeholder="e.g. gpt-4.1-mini, claude, gemini" />
+                                <input id="ai-model" class="ai-input" type="text" placeholder="e.g. gpt-4o-mini, claude-3-5-haiku-latest, gemini-1.5-flash" />
                             </label>
                             <label class="ai-field ai-key-field">
                                 <span>API Key</span>
@@ -673,7 +673,7 @@ LD_PRELOAD=./tracer/libcmhijack.so ./tracer/producer_consumer</code></pre>
                         <div class="ai-report-actions">
                             <button class="btn" id="btn-save-ai-key">Save AI Settings</button>
                             <button class="btn" id="btn-clear-ai-key">Clear Key</button>
-                            <span class="ai-report-note">Stored only in this browser via localStorage. For a production app, use a backend proxy so API keys are not exposed in client code.</span>
+                            <span class="ai-report-note">Generate Report will call the selected provider directly from this browser. For production, use a backend proxy so API keys are not exposed in client code.</span>
                         </div>
                     </div>
                     <div id="ai-report-content" class="ai-report-content">
@@ -852,7 +852,7 @@ LD_PRELOAD=./tracer/libcmhijack.so ./tracer/producer_consumer</code></pre>
     <script src="js/profiler.js?v=8"></script>
     <script src="js/lockstats.js?v=8"></script>
     <script src="js/dependency.js?v=2"></script>
-    <script src="js/aireport.js?v=2"></script>
+    <script src="js/aireport.js?v=5"></script>
     <script src="js/timeline3d.js?v=7"></script>
     <script src="js/galaxy3d.js?v=8"></script>
     <script src="js/flow3d.js?v=5"></script>
