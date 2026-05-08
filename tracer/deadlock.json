@@ -1,0 +1,193 @@
+[
+
+  {
+    "ts": 359,
+    "tid": 21,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766C7B2F5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 361,
+    "tid": 21,
+    "event": "MEM_READ",
+    "resource": "VMEM",
+    "scenario": "lock_right",
+    "addr": "0x5C0665B63160",
+    "size": 40,
+    "duration_us": 0
+  },
+  {
+    "ts": 361,
+    "tid": 21,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x5C0665B63160",
+    "scenario": "Func_0x5C0665B6054E",
+    "addr": "0x5C0665B63160",
+    "size": 0,
+    "duration_us": 0
+  },
+  {
+    "ts": 363,
+    "tid": 20,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766C7B2F5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 364,
+    "tid": 20,
+    "event": "MEM_READ",
+    "resource": "VMEM",
+    "scenario": "lock_left",
+    "addr": "0x5C0665B631A0",
+    "size": 40,
+    "duration_us": 0
+  },
+  {
+    "ts": 364,
+    "tid": 20,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x5C0665B631A0",
+    "scenario": "Func_0x5C0665B6084E",
+    "addr": "0x5C0665B631A0",
+    "size": 0,
+    "duration_us": 0
+  },
+  {
+    "ts": 50461,
+    "tid": 21,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x5C0665B60570",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 50098
+  },
+  {
+    "ts": 50462,
+    "tid": 21,
+    "event": "MEM_READ",
+    "resource": "VMEM",
+    "scenario": "lock_left",
+    "addr": "0x5C0665B631A0",
+    "size": 40,
+    "duration_us": 0
+  },
+  {
+    "ts": 50472,
+    "tid": 20,
+    "event": "SLEEP",
+    "resource": "OS_Scheduler",
+    "scenario": "Thread_Yield_0x5C0665B60870",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 50106
+  },
+  {
+    "ts": 50472,
+    "tid": 20,
+    "event": "MEM_READ",
+    "resource": "VMEM",
+    "scenario": "lock_right",
+    "addr": "0x5C0665B63160",
+    "size": 40,
+    "duration_us": 0
+  },
+  {
+    "ts": 130550,
+    "tid": 20,
+    "event": "LOCK_WAIT_TIMEOUT",
+    "resource": "Mutex_0x5C0665B63160",
+    "scenario": "TimedWait_0x5C0665B6107C",
+    "addr": "0x5C0665B63160",
+    "size": 0,
+    "duration_us": 80065
+  },
+  {
+    "ts": 130551,
+    "tid": 20,
+    "event": "DEADLOCK_DETECTED",
+    "resource": "Mutex_0x5C0665B63160",
+    "scenario": "deadlock_ab",
+    "addr": "0x5C0665B63160",
+    "size": 0,
+    "duration_us": 0
+  },
+  {
+    "ts": 130551,
+    "tid": 20,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x5C0665B631A0",
+    "scenario": "Func_0x766C7B2F5EF9",
+    "addr": "0x5C0665B631A0",
+    "size": 0,
+    "duration_us": 130187
+  },
+  {
+    "ts": 130561,
+    "tid": 20,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766C7B2F5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 130568,
+    "tid": 21,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x5C0665B631A0",
+    "scenario": "Func_0x5C0665B6061A",
+    "addr": "0x5C0665B631A0",
+    "size": 0,
+    "duration_us": 0
+  },
+  {
+    "ts": 130572,
+    "tid": 21,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x5C0665B63160",
+    "scenario": "Func_0x766C7B2F5EF9",
+    "addr": "0x5C0665B63160",
+    "size": 0,
+    "duration_us": 130211
+  },
+  {
+    "ts": 130576,
+    "tid": 21,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766C7B2F5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 130673,
+    "tid": 18,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766C7B2F5F73",
+    "addr": "0x766C7A5FE6C0",
+    "size": 0,
+    "duration_us": 130397
+  },
+  {
+    "ts": 130675,
+    "tid": 18,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766C7B2F5F73",
+    "addr": "0x766C79DFD6C0",
+    "size": 0,
+    "duration_us": 0
+  }
+]

@@ -1,0 +1,1653 @@
+[
+
+  {
+    "ts": 312,
+    "tid": 43,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 313,
+    "tid": 43,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C96859",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 0
+  },
+  {
+    "ts": 414,
+    "tid": 41,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C964E6",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 414,
+    "tid": 41,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C96504",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 0
+  },
+  {
+    "ts": 442,
+    "tid": 43,
+    "event": "COND_WAIT",
+    "resource": "CondVar_0x5FFBE1C99180",
+    "scenario": "Func_0x5FFBE1C96881",
+    "addr": "0x5FFBE1C99180",
+    "size": 0,
+    "duration_us": 127
+  },
+  {
+    "ts": 443,
+    "tid": 43,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C96A9D",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 130
+  },
+  {
+    "ts": 448,
+    "tid": 43,
+    "event": "MEM_READ",
+    "resource": "VMEM",
+    "scenario": "read_workload",
+    "addr": "0x5FFBE1C97140",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 450,
+    "tid": 46,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 450,
+    "tid": 46,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C96859",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 0
+  },
+  {
+    "ts": 451,
+    "tid": 46,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C96A9D",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 451,
+    "tid": 46,
+    "event": "MEM_READ",
+    "resource": "VMEM",
+    "scenario": "read_workload",
+    "addr": "0x5FFBE1C9714C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 455,
+    "tid": 45,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 456,
+    "tid": 45,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C96859",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 0
+  },
+  {
+    "ts": 457,
+    "tid": 45,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C96A9D",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 457,
+    "tid": 45,
+    "event": "MEM_READ",
+    "resource": "VMEM",
+    "scenario": "read_workload",
+    "addr": "0x5FFBE1C97148",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 499,
+    "tid": 44,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 501,
+    "tid": 44,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C96859",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 501,
+    "tid": 44,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C96A9D",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 0
+  },
+  {
+    "ts": 502,
+    "tid": 44,
+    "event": "MEM_READ",
+    "resource": "VMEM",
+    "scenario": "read_workload",
+    "addr": "0x5FFBE1C97144",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 546,
+    "tid": 47,
+    "event": "THREAD_START",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 547,
+    "tid": 47,
+    "event": "LOCK_ACQUIRE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C96859",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 547,
+    "tid": 47,
+    "event": "LOCK_RELEASE",
+    "resource": "Mutex_0x5FFBE1C991C0",
+    "scenario": "Func_0x5FFBE1C96A9D",
+    "addr": "0x5FFBE1C991C0",
+    "size": 0,
+    "duration_us": 0
+  },
+  {
+    "ts": 547,
+    "tid": 47,
+    "event": "MEM_READ",
+    "resource": "VMEM",
+    "scenario": "read_workload",
+    "addr": "0x5FFBE1C97150",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 575,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 575,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 638,
+    "tid": 43,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99160",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 639,
+    "tid": 43,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 186
+  },
+  {
+    "ts": 697,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 697,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 781,
+    "tid": 45,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99168",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 782,
+    "tid": 45,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 318
+  },
+  {
+    "ts": 787,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 788,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 281
+  },
+  {
+    "ts": 820,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 820,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 827,
+    "tid": 43,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99160",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 828,
+    "tid": 43,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 187
+  },
+  {
+    "ts": 858,
+    "tid": 47,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99170",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 858,
+    "tid": 47,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 308
+  },
+  {
+    "ts": 948,
+    "tid": 43,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99160",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 948,
+    "tid": 43,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 119
+  },
+  {
+    "ts": 961,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 961,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 140
+  },
+  {
+    "ts": 982,
+    "tid": 45,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99168",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 982,
+    "tid": 45,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 200
+  },
+  {
+    "ts": 1031,
+    "tid": 43,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99160",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1031,
+    "tid": 43,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 82
+  },
+  {
+    "ts": 1053,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1054,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 264
+  },
+  {
+    "ts": 1084,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1084,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 1092,
+    "tid": 45,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99168",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1092,
+    "tid": 45,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 108
+  },
+  {
+    "ts": 1115,
+    "tid": 43,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99160",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1115,
+    "tid": 43,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 82
+  },
+  {
+    "ts": 1193,
+    "tid": 47,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99170",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1193,
+    "tid": 47,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 334
+  },
+  {
+    "ts": 1200,
+    "tid": 43,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99160",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1200,
+    "tid": 43,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 84
+  },
+  {
+    "ts": 1201,
+    "tid": 45,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99168",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1201,
+    "tid": 45,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 108
+  },
+  {
+    "ts": 1204,
+    "tid": 43,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 1205,
+    "tid": 45,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 1206,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1207,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 1242,
+    "tid": 41,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5F73",
+    "addr": "0x766E2EDFE6C0",
+    "size": 0,
+    "duration_us": 822
+  },
+  {
+    "ts": 1277,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1277,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 222
+  },
+  {
+    "ts": 1332,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1335,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 128
+  },
+  {
+    "ts": 1458,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1458,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 1498,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1499,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 220
+  },
+  {
+    "ts": 1503,
+    "tid": 47,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99170",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1503,
+    "tid": 47,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 309
+  },
+  {
+    "ts": 1581,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1581,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 1703,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1703,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 1719,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1719,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 219
+  },
+  {
+    "ts": 1813,
+    "tid": 47,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99170",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1813,
+    "tid": 47,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 309
+  },
+  {
+    "ts": 1826,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1826,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 1954,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1954,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 234
+  },
+  {
+    "ts": 1960,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1960,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 133
+  },
+  {
+    "ts": 1986,
+    "tid": 47,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99170",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 1987,
+    "tid": 47,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 173
+  },
+  {
+    "ts": 2083,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2083,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 2123,
+    "tid": 47,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99170",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2123,
+    "tid": 47,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 136
+  },
+  {
+    "ts": 2174,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2174,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 219
+  },
+  {
+    "ts": 2206,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2206,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 2259,
+    "tid": 47,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99170",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2259,
+    "tid": 47,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 136
+  },
+  {
+    "ts": 2328,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2329,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 2395,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2395,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 219
+  },
+  {
+    "ts": 2395,
+    "tid": 47,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99170",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2395,
+    "tid": 47,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 136
+  },
+  {
+    "ts": 2451,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2451,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 2532,
+    "tid": 47,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99170",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2532,
+    "tid": 47,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 136
+  },
+  {
+    "ts": 2574,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2574,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 2616,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2616,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 220
+  },
+  {
+    "ts": 2668,
+    "tid": 47,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99170",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2668,
+    "tid": 47,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 136
+  },
+  {
+    "ts": 2670,
+    "tid": 47,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 2697,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2697,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 2820,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2820,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 2836,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2836,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 220
+  },
+  {
+    "ts": 2951,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2951,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 131
+  },
+  {
+    "ts": 2984,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 2984,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 147
+  },
+  {
+    "ts": 3074,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3074,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 3082,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3083,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 97
+  },
+  {
+    "ts": 3180,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3180,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 97
+  },
+  {
+    "ts": 3197,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3197,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 3278,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3278,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 97
+  },
+  {
+    "ts": 3320,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3320,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 3376,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3383,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 104
+  },
+  {
+    "ts": 3443,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3443,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 3481,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3481,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 97
+  },
+  {
+    "ts": 3566,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3566,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 3577,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3577,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 95
+  },
+  {
+    "ts": 3673,
+    "tid": 44,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C99164",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3673,
+    "tid": 44,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 95
+  },
+  {
+    "ts": 3675,
+    "tid": 44,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 3689,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3689,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 3707,
+    "tid": 41,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5F73",
+    "addr": "0x766E2E5FD6C0",
+    "size": 0,
+    "duration_us": 2465
+  },
+  {
+    "ts": 3707,
+    "tid": 41,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5F73",
+    "addr": "0x766E2DDFC6C0",
+    "size": 0,
+    "duration_us": 0
+  },
+  {
+    "ts": 3812,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3812,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 122
+  },
+  {
+    "ts": 3944,
+    "tid": 46,
+    "event": "MEM_WRITE",
+    "resource": "VMEM",
+    "scenario": "publish_progress",
+    "addr": "0x5FFBE1C9916C",
+    "size": 4,
+    "duration_us": 0
+  },
+  {
+    "ts": 3944,
+    "tid": 46,
+    "event": "COMPUTE",
+    "resource": "CPU",
+    "scenario": "uneven_work_chunk",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 131
+  },
+  {
+    "ts": 3945,
+    "tid": 46,
+    "event": "THREAD_END",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5FF1",
+    "addr": "0x0",
+    "size": 0,
+    "duration_us": 1
+  },
+  {
+    "ts": 3960,
+    "tid": 41,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5F73",
+    "addr": "0x766E2D5FB6C0",
+    "size": 0,
+    "duration_us": 253
+  },
+  {
+    "ts": 3986,
+    "tid": 41,
+    "event": "THREAD_JOIN",
+    "resource": "Thread_Lifecycle",
+    "scenario": "Lifecycle_0x766E2FAF5F73",
+    "addr": "0x766E2CDFA6C0",
+    "size": 0,
+    "duration_us": 25
+  }
+]

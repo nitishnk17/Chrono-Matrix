@@ -1,0 +1,65 @@
+/**
+ * eventbus.js — Tiny pub/sub event bus for cross-view coordination
+ */
+
+// Centralized Design Tokens — cohesive modern palette
+const EVENT_COLORS = {
+    'COMPUTE':           '#38bdf8',   // sky-blue   — active computation
+    'IO_WAIT':           '#fb923c',   // orange     — waiting on I/O
+    'SLEEP':             '#64748b',   // slate-grey — idle sleep
+    'COND_WAIT':         '#e879f9',   // fuchsia    — condition variable wait
+    'LOCK_WAIT':         '#f43f5e',   // rose-red   — blocked on mutex
+    'LOCK_WAIT_TIMEOUT': '#ef4444',   // red        — timed wait expired
+    'LOCK_ACQUIRE':      '#34d399',   // emerald    — mutex acquired
+    'LOCK_RELEASE':      '#94a3b8',   // cool-grey  — mutex released
+    'THREAD_JOIN':       '#a78bfa',   // violet     — joining another thread
+    'THREAD_START':      '#4ade80',   // green      — thread born
+    'THREAD_END':        '#475569',   // dark-slate — thread exits
+    'DEADLOCK_DETECTED': '#ef4444',   // red        — deadlock
+    'MEM_READ':          '#38bdf8',   // sky-blue   — memory read
+    'MEM_WRITE':         '#f97316',   // orange     — memory write
+    'MEM_ALLOC':         '#22c55e',   // green      — allocation
+    'MEM_FREE':          '#a855f7',   // purple     — free
+};
+
+const EventBus = (() => {
+    const listeners = {};
+    return {
+        colors: EVENT_COLORS,
+        on(event, cb) {
+            if (!listeners[event]) listeners[event] = [];
+            listeners[event].push(cb);
+        },
+        emit(event, data) {
+            (listeners[event] || []).forEach(cb => cb(data));
+        },
+        clear() {
+            Object.keys(listeners).forEach(k => delete listeners[k]);
+        },
+        off(event, cb) {
+            if (listeners[event])
+                listeners[event] = listeners[event].filter(fn => fn !== cb);
+        },
+        positionTooltip(el, event, options = {}) {
+            if (!el || !event) return;
+            const pad = options.pad ?? 12;
+            const offset = options.offset ?? 14;
+            const preferAbove = options.preferAbove ?? false;
+            const w = el.offsetWidth || 280;
+            const h = el.offsetHeight || 120;
+
+            let x = event.clientX + offset;
+            if (x + w + pad > window.innerWidth) {
+                x = event.clientX - w - offset;
+            }
+
+            let y = preferAbove ? event.clientY - h - offset : event.clientY - offset;
+            if (y + h + pad > window.innerHeight) {
+                y = event.clientY - h - offset;
+            }
+
+            el.style.left = Math.max(pad, Math.min(x, window.innerWidth - w - pad)) + 'px';
+            el.style.top = Math.max(pad, Math.min(y, window.innerHeight - h - pad)) + 'px';
+        }
+    };
+})();
